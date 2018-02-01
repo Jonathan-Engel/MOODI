@@ -2,6 +2,7 @@ package teammoodi.moodi;
 
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.view.View;
 import android.widget.TextView;
 
 public class Dashboard extends WearableActivity {
@@ -18,4 +19,6 @@ public class Dashboard extends WearableActivity {
         // Enables Always-on
         setAmbientEnabled();
     }
+
+
 }
