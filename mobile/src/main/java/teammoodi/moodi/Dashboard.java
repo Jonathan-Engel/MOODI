@@ -8,28 +8,39 @@ import android.content.Intent;
 
 public class Dashboard extends AppCompatActivity {
 
-    private Button button2;
+    private Button SignUpButton;
+    private Button LogInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        button2 = (Button) findViewById(R.id.button2);
+        SignUpButton = findViewById(R.id.SignUpBotton);
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        SignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                launchActivity();
+                launchSignUp();
             }
         });
 
+        LogInButton = findViewById(R.id.LogInButton);
+        LogInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchLogIn();
+            }
+        });
 
     }
 
-    private void launchActivity() {
+    private void launchSignUp() {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+    }
 
+    private void launchLogIn(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
