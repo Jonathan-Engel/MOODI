@@ -5,6 +5,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,12 +30,22 @@ public class Dashboard extends AppCompatActivity {
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
             minBufferSize);
+=======
+import android.widget.Button;
+import android.view.View;
+import android.content.Intent;
+
+public class Dashboard extends AppCompatActivity {
+
+    private Button button2;
+>>>>>>> master
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+<<<<<<< HEAD
         mTextView = (TextView) findViewById(R.id.dashText);
     }
 
@@ -72,5 +83,24 @@ public class Dashboard extends AppCompatActivity {
             mTextView.setText(R.string.error_recording);
             // Throw an error.
         }
+=======
+        button2 = (Button) findViewById(R.id.button2);
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                launchActivity();
+            }
+        });
+
+
+    }
+
+    private void launchActivity() {
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+>>>>>>> master
     }
 }
