@@ -5,6 +5,5 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
-    <string name="recordButton_description">Button to record user voice input</string>
-    <string name="record_text">Tap to record</string>
+    <string name="start_recording">Begin recording</string>
 </resources>

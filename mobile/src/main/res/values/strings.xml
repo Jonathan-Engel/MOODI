@@ -1,13 +1,5 @@
 <resources>
     <string name="app_name">MOODI</string>
->>>>>>> HEAD
-    <string name="recording_status">No recordings yet</string>
-    <string name="stopped_recording">Recording has stopped</string>
-    <string name="started_recording">Recording has started</string>
-    <string name="error_recording">Error trying to record</string>
-    <string name="start_recording_button">Start recording</string>
-    <string name="stop_recording_button">Stop recording</string>
-=======
     <string name="welcome_to">Welcome to.....</string>
     <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>
@@ -28,5 +20,4 @@
     </string>
     <string name="record">Record</string>
     <string name="back">Back</string>
->>>>>>> master
 </resources>
