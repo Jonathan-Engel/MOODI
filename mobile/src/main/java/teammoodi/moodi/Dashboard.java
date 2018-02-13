@@ -10,6 +10,7 @@ public class Dashboard extends AppCompatActivity {
 
     private Button SignUpButton;
     private Button LogInButton;
+    private Button GotoRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,14 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
+        GotoRecord = findViewById(R.id.gotorecordbutton);
+        GotoRecord.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Record.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void launchSignUp() {

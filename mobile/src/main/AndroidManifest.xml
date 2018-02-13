@@ -25,12 +25,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:theme="@style/MoodiNewTheme"
-            android:label="Log In"></activity>
-        <activity android:name=".SignUpActivity"
+            android:label="Log In"/>
+        <activity
+            android:name=".SignUpActivity"
             android:theme="@style/MoodiNewTheme"
-            android:label="Sign Up"></activity>
+            android:label="Sign Up"/>
+        <activity
+            android:name=".Record"
+            android:theme="@style/MoodiNewTheme"
+            android:label="Record New Mixtape"/>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class Record extends AppCompatActivity{ //currently doesn't do shit so fuck you
+public class Record extends AppCompatActivity{
 
     private Button recordButton;
 
