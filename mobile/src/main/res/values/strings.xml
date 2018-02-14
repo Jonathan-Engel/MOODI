@@ -27,5 +27,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="gotorecord">Record</string>
     <string name="stopbutton">Stop</string>
+    <string name="LogInActivity">Log In</string>
+    <string name="SignUpActivity">Sign Up</string>
+    <string name="RecordActivity">Drop New Mixtape</string>
 </resources>
 

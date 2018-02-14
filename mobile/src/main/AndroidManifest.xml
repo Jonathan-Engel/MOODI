@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -28,15 +31,15 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/MoodiNewTheme"
-            android:label="Log In"/>
+            android:label="@string/LogInActivity"/>
         <activity
             android:name=".SignUpActivity"
             android:theme="@style/MoodiNewTheme"
-            android:label="Sign Up"/>
+            android:label="@string/SignUpActivity"/>
         <activity
             android:name=".Record"
             android:theme="@style/MoodiNewTheme"
-            android:label="Record New Mixtape"/>
+            android:label="@string/RecordActivity"/>
     </application>
 
 </manifest>
