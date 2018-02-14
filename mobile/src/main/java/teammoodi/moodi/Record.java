@@ -73,6 +73,11 @@ public class Record extends AppCompatActivity{
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mediaRecorder.stop();
+                stopButton.setEnabled(false);
+                recordButton.setEnabled(true);
+
+                Toast.makeText(Record.this, "Recording Completed", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -110,9 +115,10 @@ public class Record extends AppCompatActivity{
     }
 
     public boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
-        int result1 = ContextCompat.checkSelfPermission(getApplicationContext(), RECORD_AUDIO);
-        return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
+        return (ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(getApplicationContext(), RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED);
     }
 
     public void MediaRecorderReady(){
