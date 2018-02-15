@@ -45,7 +45,7 @@ public class Record extends AppCompatActivity{
                 if(checkPermission()) {
 
                     AudioSavePathInDevice =
-                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecording.3gp";
+                            Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.mp4";
 
                     MediaRecorderReady();
 
