@@ -2,6 +2,7 @@ package teammoodi.moodi;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -11,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 import java.io.IOException;
-import java.util.Random;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -23,20 +23,19 @@ public class Record extends AppCompatActivity{
     //to access recording on phone: go to settings, storage, files
 
     public static final int REQUESTPERMISSION = 1;
-    Random random;
     String AudioSavePathInDevice = null;
     MediaRecorder mediaRecorder;
+    MediaPlayer mediaPlayer;
 
     private Button recordButton;
     private Button backButton;
     private Button stopButton;
+    private Button playbackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
-
-        random = new Random();
 
         recordButton = findViewById(R.id.recordbutton);
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +75,7 @@ public class Record extends AppCompatActivity{
                 mediaRecorder.stop();
                 stopButton.setEnabled(false);
                 recordButton.setEnabled(true);
+                playbackButton.setEnabled(true);
 
                 Toast.makeText(Record.this, "Recording Completed", Toast.LENGTH_LONG).show();
             }
@@ -87,6 +87,28 @@ public class Record extends AppCompatActivity{
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Dashboard.class);
                 startActivity(intent);
+            }
+        });
+
+        playbackButton = findViewById(R.id.playbackbutton);
+        playbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) throws IllegalArgumentException, SecurityException, IllegalStateException {
+                stopButton.setEnabled(false);
+                recordButton.setEnabled(false);
+
+                mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.setDataSource(AudioSavePathInDevice);
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                mediaPlayer.start();
+                Toast.makeText(Record.this, "Recording Playing",
+                        Toast.LENGTH_LONG).show();
+
             }
         });
     }

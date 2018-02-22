@@ -30,5 +30,6 @@
     <string name="LogInActivity">Log In</string>
     <string name="SignUpActivity">Sign Up</string>
     <string name="RecordActivity">Drop New Mixtape</string>
+    <string name="playback">Playback</string>
 </resources>
 
