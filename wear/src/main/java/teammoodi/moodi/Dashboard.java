@@ -11,6 +11,7 @@ import android.support.wearable.phone.PhoneDeviceType;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -76,7 +77,9 @@ public class Dashboard extends WearableActivity
                     }
 
                     // setupVoiceTranscription();
-                    Log.d("Phone ID: ", connectedNode.toString());
+                    Log.d("Connected phone ID: ", connectedNode.toString());
+
+
 
                     /*
                     Intent intent = new Intent(mainActivity, Dashboard.class);
@@ -87,7 +90,8 @@ public class Dashboard extends WearableActivity
                     RemoteIntent.startRemoteActivity(mainActivity,
                             new Intent(Intent.ACTION_VIEW)
                                     .addCategory(Intent.CATEGORY_BROWSABLE)
-                                    .setData(Uri.parse("http://www.google.com")), null
+                                    .setData(Uri.parse("http://www.google.com"))
+                                    ,null
                                     , connectedNode.getId());
 
                     Log.d("connectedNode.getId() ", connectedNode.getId());
@@ -98,16 +102,6 @@ public class Dashboard extends WearableActivity
         };
 
         thread.start();
-
-
-
-        Log.d("00001", "-----Record button has been clicked--------");
-        Log.d("00002", "getPhoneDeviceType(this)");
-
-        int phoneDevType = PhoneDeviceType.getPhoneDeviceType(getApplicationContext());
-
-        Log.d("00003", "Android device value is: " + PhoneDeviceType.DEVICE_TYPE_ANDROID);
-        Log.d("00004", "phoneDevType: " + phoneDevType);
     }
 
 
