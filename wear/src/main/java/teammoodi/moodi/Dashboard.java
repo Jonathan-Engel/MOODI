@@ -3,6 +3,7 @@ package teammoodi.moodi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.wearable.activity.WearableActivity;
@@ -24,6 +25,7 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.NodeClient;
 import com.google.android.gms.wearable.Wearable;
+import com.google.android.wearable.intent.RemoteIntent;
 
 import java.util.List;
 import java.util.Set;
@@ -64,10 +66,32 @@ public class Dashboard extends WearableActivity
             public void run()
             {
                 try {
-                    List<Node> nodes = Tasks.await(Wearable.getNodeClient(mainActivity).getConnectedNodes());
+                    List<Node> nodes = Tasks.await(Wearable.getNodeClient(mainActivity)
+                            .getConnectedNodes());
+
+                    for (Node node : nodes)
+                    {
+                        if (node.isNearby())
+                            connectedNode = node; // connectedNode is the phone
+                    }
 
                     // setupVoiceTranscription();
-                    Log.d("IT WORKED", nodes.toString()); }
+                    Log.d("Phone ID: ", connectedNode.toString());
+
+                    /*
+                    Intent intent = new Intent(mainActivity, Dashboard.class);
+                    intent.putExtra("androidWear", "Hello from the watch!");
+                    startActivity(intent);
+                    */
+
+                    RemoteIntent.startRemoteActivity(mainActivity,
+                            new Intent(Intent.ACTION_VIEW)
+                                    .addCategory(Intent.CATEGORY_BROWSABLE)
+                                    .setData(Uri.parse("http://www.google.com")), null
+                                    , connectedNode.getId());
+
+                    Log.d("connectedNode.getId() ", connectedNode.getId());
+                }
                 catch (ExecutionException execException){Log.e("0001", execException.toString());}
                 catch (InterruptedException interException){Log.e("0002", interException.toString());}
             }
