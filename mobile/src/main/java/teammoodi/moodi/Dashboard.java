@@ -3,13 +3,21 @@ package teammoodi.moodi;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.net.Uri;
+import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
@@ -24,6 +32,36 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+
+        /* Receive message from Wear
+        MessageClient.OnMessageReceivedListener onMessageReceivedListener =
+                (new MessageClient.OnMessageReceivedListener() {
+            @Override
+            public void onMessageReceived(@NonNull MessageEvent messageEvent)
+            {
+                if (messageEvent.getPath().equalsIgnoreCase("/moodiWear_Message"))
+                {
+                    Log.d("Message received from wear", messageEvent.getData().toString());
+
+                    System.out.println(messageEvent.getData());
+                }
+            }
+        });*/
+        DataClient.OnDataChangedListener onDataChangedListener = (new DataClient.OnDataChangedListener() {
+            @Override
+            public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
+                Log.d("WEAR MESSAGE RECEIVED", dataEventBuffer
+                                                    .get(0)
+                                                    .getDataItem()
+                                                    .getData()
+                                                    .toString());
+            }
+        });
+
+        Wearable.getDataClient(this).addListener(onDataChangedListener);
+
+        // Done with wear messaging
 
         SignUpButton = findViewById(R.id.SignUpBotton);
 
@@ -61,30 +99,5 @@ public class Dashboard extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-
-    /* TRYING OUT THE MESSAGE PASSING BETWEEN THE WEAR AND THE PHONE
-    *
-    * Added
-    *   implements MessageClient.OnMessageReceivedListener
-    *   the code below
-    *
-    public static final String VOICE_TRANSCRIPTION_MESSAGE_PATH = "/voice_transcription";
-
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent)
-    {
-        if (messageEvent.getPath().equals(VOICE_TRANSCRIPTION_MESSAGE_PATH))
-        {
-            Intent startIntent = new Intent(this, Dashboard.class);
-            startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startIntent.putExtra("VOICE_DATA", messageEvent.getData());
-            startActivity(startIntent);
-        }
-    } */
-
-    // DataClient dataClient = Wearable.getDataClient(this);
-
-    // 192.168.1.176:5555
-
 
 }
