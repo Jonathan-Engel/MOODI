@@ -71,6 +71,11 @@ public class Dashboard extends WearableActivity
 
     public void recordButton_OnClick(View view)
     {
+        /*
+        * TODO - Create the recording functionality, set it up like Arthur has it from the mobile
+        *        app. Instead of saving it, pass it through the DataItem to the mobile app.
+        * */
+
         Thread thread = new Thread()
         {
             public void run()
@@ -87,6 +92,8 @@ public class Dashboard extends WearableActivity
                     }
 
                     Log.d("Connected phone ID: ", connectedNode.toString());
+
+                    // TODO - Put in the functionality here
 
                     Wearable.getDataClient(mainActivity)
                             .putDataItem

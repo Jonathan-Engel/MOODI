@@ -34,20 +34,9 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
 
-        /* Receive message from Wear
-        MessageClient.OnMessageReceivedListener onMessageReceivedListener =
-                (new MessageClient.OnMessageReceivedListener() {
-            @Override
-            public void onMessageReceived(@NonNull MessageEvent messageEvent)
-            {
-                if (messageEvent.getPath().equalsIgnoreCase("/moodiWear_Message"))
-                {
-                    Log.d("Message received from wear", messageEvent.getData().toString());
-
-                    System.out.println(messageEvent.getData());
-                }
-            }
-        });*/
+        /*
+        Listen if wear changes data
+        */
         DataClient.OnDataChangedListener onDataChangedListener = (new DataClient.OnDataChangedListener() {
             @Override
             public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
