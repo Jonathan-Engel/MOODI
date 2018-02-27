@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   .page-header
-    h3 Profile Information
+    h3 Profile Settings
 
   form.form-horizontal(action='/account/profile', method='POST')
     input(type='hidden', name='_csrf', value=_csrf)
@@ -73,7 +73,7 @@ block content
       .col-sm-offset-3.col-sm-4
         button.btn.btn-danger(type='submit')
           i.fa.fa-trash
-          | Delete my account
+          | Delete account
 
   .page-header
     h3 Linked Accounts
@@ -84,4 +84,8 @@ block content
           p: a.text-danger(href='/account/unlink/facebook') Unlink your Facebook account
         else
           p: a(href='/auth/facebook') Link your Facebook account
+
+
+  .page-header
+    h3  
 
