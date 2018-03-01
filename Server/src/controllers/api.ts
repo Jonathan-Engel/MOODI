@@ -4,7 +4,8 @@ import * as async from "async";
 import * as request from "request";
 import * as graph from "fbgraph";
 import { Response, Request, NextFunction } from "express";
-
+import * as multer from "multer";
+const upload = multer();
 
 /**
  * GET /api
@@ -31,3 +32,15 @@ export let getFacebook = (req: Request, res: Response, next: NextFunction) => {
     });
   });
 };
+
+export let postProcessAudio = (req: Request, res: Response, next: NextFunction) => {
+  upload.single("audio_sample")(req, res, (err: Error) => {
+    if (err) {
+      res.json({"status": -1, "errors": err});
+    }
+    res.json({"status": 1});
+  });
+};
+
+
+
