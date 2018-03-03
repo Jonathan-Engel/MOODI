@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
 import android.widget.Toast;
+import java.net.CookieManager;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -60,7 +61,7 @@ public class Dashboard extends AppCompatActivity {
         });
     }
 
-    public class logOutDialog extends DialogFragment{
+    static public class logOutDialog extends DialogFragment{
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -84,7 +85,8 @@ public class Dashboard extends AppCompatActivity {
 
         public void handleOk(){
             Toast.makeText(getActivity(), "Logged out", Toast.LENGTH_LONG).show();
-            //TODO: Delete Cookies
+
+            //TODO: Delete Session Cookies
         }
     }
 
