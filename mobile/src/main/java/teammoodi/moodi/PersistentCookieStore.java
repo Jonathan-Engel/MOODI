@@ -13,9 +13,10 @@
         * See the License for the specific language governing permissions and
         * limitations under the License.
         */
-
+package teammoodi.moodi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.net.CookieStore;
 import java.net.HttpCookie;
