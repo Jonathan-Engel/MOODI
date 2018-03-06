@@ -12,6 +12,8 @@ import * as mongoose from "mongoose";
 import * as passport from "passport";
 import * as expressValidator from "express-validator";
 import * as bluebird from "bluebird";
+import * as multer from "multer";
+const upload = multer();
 
 const MongoStore = mongo(session);
 
@@ -30,6 +32,7 @@ import * as passportConfig from "./config/passport";
 
 // Create Express server
 const app = express();
+app.use(upload.any());
 
 // Connect to MongoDB
 const mongoUrl = process.env.MONGOLAB_URI;
@@ -104,6 +107,7 @@ app.post("/account/profile", passportConfig.isAuthenticated, userController.post
 app.post("/account/password", passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post("/account/delete", passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userController.getOauthUnlink);
+app.post("/ProcessAudio", passportConfig.isAuthenticated, apiController.postProcessAudio);
 
 /**
  * API examples routes.
