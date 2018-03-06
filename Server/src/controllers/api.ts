@@ -31,3 +31,13 @@ export let getFacebook = (req: Request, res: Response, next: NextFunction) => {
     });
   });
 };
+
+export let postProcessAudio = (req: Request, res: Response, next: NextFunction) => {
+  upload.single("audio_sample")(req, res, (err: Error) => {
+    if (err) {
+      res.json({"status": -1, "errors": err});
+    }
+    res.json({"status": 1});
+  });
+};
+
