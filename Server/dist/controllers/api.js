@@ -34,9 +34,6 @@ exports.postProcessAudio = (req, res, next) => {
         if (err) {
             res.json({ "status": -1, "errors": err });
         }
-        console.log(req.body);
-        console.log(req.file);
-        console.log(req.files);
         res.json({ "status": 1 });
     });
 };
