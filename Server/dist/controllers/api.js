@@ -27,4 +27,12 @@ exports.getFacebook = (req, res, next) => {
         });
     });
 };
+exports.postProcessAudio = (req, res, next) => {
+    upload.single("audio_sample")(req, res, (err) => {
+        if (err) {
+            res.json({ "status": -1, "errors": err });
+        }
+        res.json({ "status": 1 });
+    });
+};
 //# sourceMappingURL=api.js.map
