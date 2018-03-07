@@ -13,7 +13,7 @@ import * as passport from "passport";
 import * as expressValidator from "express-validator";
 import * as bluebird from "bluebird";
 import * as multer from "multer";
-const upload = multer({dest: '/uploads' });
+const upload = multer({dest: "uploads/" });
 
 
 const MongoStore = mongo(session);
