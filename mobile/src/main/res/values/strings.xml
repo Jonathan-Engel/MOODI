@@ -25,5 +25,15 @@
     <string name="last_name">Last Name</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="gotorecord">Record</string>
+    <string name="stopbutton">Stop</string>
+    <string name="home">Home</string>
+    <string name="LogInActivity">Log In</string>
+    <string name="SignUpActivity">Sign Up</string>
+    <string name="RecordActivity">Drop New Mixtape</string>
+    <string name="playback">Playback</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello from record fragment</string>
 </resources>
 
