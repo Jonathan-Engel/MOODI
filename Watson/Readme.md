@@ -3,8 +3,6 @@
 https://www.getpostman.com/collections/b31d970a3b1c6e19480d
 ```
 
-
-
 # Watson Documentation
 
 Here I will store the fruits of my research, usefull code snippits, links, ect.
