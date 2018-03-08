@@ -35,5 +35,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello from record fragment</string>
+    <string name="team_sd_logo">Team SD Logo</string>
+    <string name="welcome_to_moodi">Welcome to Moodi!</string>
 </resources>
 
