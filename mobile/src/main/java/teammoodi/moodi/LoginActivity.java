@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         new AsyncCheckLogin().execute("", "");
     }
 
-    protected void checkLogin(View view) {
+    public void checkLogin(View view) {
 
         EditText etEmail = findViewById(R.id.email);
         EditText etPassword = findViewById(R.id.password);
