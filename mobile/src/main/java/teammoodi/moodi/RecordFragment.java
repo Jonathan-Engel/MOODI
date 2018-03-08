@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -60,6 +62,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     MediaPlayer mediaPlayer;
 
     private OnRecordFragmentInteractionListener mListener;
+    private LottieAnimationView signal;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -99,8 +102,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_record, container, false);
-        ImageButton recordbutton = v.findViewById(R.id.record_button);
-        recordbutton.setOnClickListener(this);
+        LottieAnimationView animationView = v.findViewById(R.id.animation_view);
+        animationView.setOnClickListener(this);
+        signal = v.findViewById(R.id.processing_view);
         return v;
     }
 
@@ -132,8 +136,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.record_button:
-                ProcessAudio();
+            case R.id.animation_view:
+                ProcessAudio(view);
                 break;
             default:
                 break;
@@ -141,14 +145,18 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean bIsProcessing = false;
-    public void ProcessAudio() {
+    public void ProcessAudio(View v) {
+        LottieAnimationView view = (LottieAnimationView)v;
         if (bIsProcessing)
         {
+            view.cancelAnimation();
             mediaRecorder.stop();
             bIsProcessing = false;
             Toast.makeText(getActivity(), "Processing", Toast.LENGTH_SHORT).show();
-            new AsyncProcessAudio()
-                    .execute(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.mp4");
+            signal.playAnimation();
+            /*new AsyncProcessAudio()
+                    .execute(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.mp4");*/
+            return;
         }
         if(checkPermission()) {
 
@@ -166,7 +174,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
 
-
+            view.playAnimation();
             Toast.makeText(getActivity(), "Recording started", Toast.LENGTH_SHORT).show();
             bIsProcessing = true;
         } else {
