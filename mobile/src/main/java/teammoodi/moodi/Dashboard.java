@@ -56,10 +56,16 @@ public class Dashboard extends AppCompatActivity
                                 ChangeFragment(new SettingsFragment());
                                 break;
                             case R.id.nav_logout:
-                                ConfirmationWindow cf = new ConfirmationWindow();
-                                cf.SetListener(new ConfirmationWindow.ILogoutListener() {
+                                LogoutConfirmationFragment cf = new LogoutConfirmationFragment();
+                                //
+                                // This anon class implements the ILogoutListener
+                                //
+                                cf.SetListener(new LogoutConfirmationFragment.ILogoutListener() {
                                     @Override
                                     public void Logout() {
+                                        //
+                                        //The actual code to run given a positive dialog
+                                        //
                                         PersistentCookieStore cookieStore = new PersistentCookieStore(getApplicationContext());
                                         cookieStore.removeAll();
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

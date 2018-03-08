@@ -8,9 +8,12 @@ import android.os.Bundle;
 
 
 
-public class ConfirmationWindow extends DialogFragment {
+public class LogoutConfirmationFragment extends DialogFragment {
 
 
+    //
+    //Public interface for classes to implement
+    //
     public interface ILogoutListener {
         void Logout();
     }
@@ -25,7 +28,10 @@ public class ConfirmationWindow extends DialogFragment {
                .setPositiveButton("Log out", new DialogInterface.OnClickListener() {
                    @Override
                    public void onClick(DialogInterface dialog, int which) {
-                        m_logoutListener.Logout();
+                       //
+                       //The code which invokes the callback
+                       //
+                       m_logoutListener.Logout();
                    }
                })
                .setCancelable(true)
@@ -41,6 +47,9 @@ public class ConfirmationWindow extends DialogFragment {
        return builder.create();
    }
 
+   //
+   //Setter for the callback
+   //
    public void SetListener(ILogoutListener listener) {
         m_logoutListener = listener;
    }
