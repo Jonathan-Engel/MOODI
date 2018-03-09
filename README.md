@@ -9,8 +9,14 @@ https://www.getpostman.com/collections/b31d970a3b1c6e19480d
 # Links!
 ## General
 ```
+//Account dashboard
 https://console.bluemix.net/dashboard/apps
+
+//Node.js Watson documentaion
 https://console.bluemix.net/docs/services/watson/developing-nodejs.html#developing-a-watson-application-in-node-js
+
+//Example Node Application
+https://github.com/watson-developer-cloud/node-sdk
 ```
 
 ## Speech - To - Text
