@@ -4,7 +4,7 @@ https://www.getpostman.com/collections/b31d970a3b1c6e19480d
 ```
 
 ## Watson Tone Analyzer Tones
-![alt text](https://github.com/Jonathan-Engel/MOODI/blob/new_master/Watson/Screen%20Shot%202018-03-08%20at%207.58.51%20PM.png)
+![alt text](https://github.com/Jonathan-Engel/MOODI/blob/new_master/Images/Screen%20Shot%202018-03-08%20at%207.58.51%20PM.png)
 
 # Links!
 ## General
