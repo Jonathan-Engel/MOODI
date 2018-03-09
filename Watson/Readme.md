@@ -7,19 +7,8 @@ https://www.getpostman.com/collections/b31d970a3b1c6e19480d
 
 Here I will store the fruits of my research, usefull code snippits, links, ect.
 
-## Noteable findings
-### Speech - To - Text
-* We can define keywords that watson will pick up on, and track. 
-* Watson can recgonize voices (A.K.A speaker 1, speaker 2).
-* Watson can keep track of the number of times a specific word was used. 
-
-### Tone - Analyzer
-
-
-
-
-
-
+## Watson Tone Analyzer Tones
+![alt text](https://github.com/Jonathan-Engel/MOODI/blob/new_master/Watson/Screen%20Shot%202018-03-08%20at%207.58.51%20PM.png)
 
 # Links!
 ## General
