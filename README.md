@@ -18,7 +18,7 @@ https://console.bluemix.net/docs/services/watson/developing-nodejs.html#developi
 //Example Node Application
 https://github.com/watson-developer-cloud/node-sdk
 ```
-
+ 
 ## Speech - To - Text
 Demo:
 ```
