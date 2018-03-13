@@ -23,6 +23,7 @@ import * as homeController from "./controllers/home";
 import * as userController from "./controllers/user";
 import * as apiController from "./controllers/api";
 import * as contactController from "./controllers/contact";
+import * as aboutusController from "./controllers/aboutus";
 
 
 // API keys and Passport configuration
@@ -110,7 +111,7 @@ app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userControl
  */
 app.get("/api", apiController.getApi);
 app.get("/api/facebook", passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
-
+app.get("/aboutus", aboutusController.index);
 /**
  * OAuth authentication routes. (Sign in)
  */

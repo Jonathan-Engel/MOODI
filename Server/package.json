@@ -48,6 +48,7 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.4",
+    "pug-base-layout": "^0.3.0",
     "request": "^2.83.0"
   },
   "devDependencies": {

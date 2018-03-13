@@ -22,6 +22,7 @@ const homeController = require("./controllers/home");
 const userController = require("./controllers/user");
 const apiController = require("./controllers/api");
 const contactController = require("./controllers/contact");
+const aboutusController = require("./controllers/aboutus");
 // API keys and Passport configuration
 const passportConfig = require("./config/passport");
 // Create Express server
@@ -101,6 +102,7 @@ app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userControl
  */
 app.get("/api", apiController.getApi);
 app.get("/api/facebook", passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
+app.get("/aboutus", aboutusController.index);
 /**
  * OAuth authentication routes. (Sign in)
  */
