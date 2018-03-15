@@ -164,7 +164,7 @@ public class Dashboard extends WearableActivity
                   dataMap.getDataMap().toString());
 
             PutDataRequest request = dataMap.asPutDataRequest().setUrgent();
-            Log.d("MEDIA_RECORDER-------", "PutDataRequest done - " +
+            Log.d("MEDIA_RECORDER----", "PutDataRequest done - " +
                   request.toString());
 
             Task<DataItem> putTask = Wearable
