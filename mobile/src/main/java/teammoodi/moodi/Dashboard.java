@@ -1,5 +1,6 @@
 package teammoodi.moodi;
 
+import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -15,15 +16,24 @@ import android.view.View;
 import android.content.Intent;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.CapabilityClient;
+import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.WearableListenerService;
 
 public class Dashboard extends AppCompatActivity {
 
+    private Activity curActivity = this;
     private Button SignUpButton;
     private Button LogInButton;
     private Button GotoRecord;
@@ -33,24 +43,37 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-
         /*
         Listen if wear changes data
         */
+
         DataClient.OnDataChangedListener onDataChangedListener = (new DataClient.OnDataChangedListener() {
             @Override
             public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
-                Log.d("WEAR MESSAGE RECEIVED", dataEventBuffer
-                                                    .get(0)
-                                                    .getDataItem()
-                                                    .getData()
-                                                    .toString());
+                Log.d("DATA_CHANGED", "Data has been changed");
+                for (DataEvent event : dataEventBuffer)
+                {
+                    //if (event.getType() == DataEvent.TYPE_CHANGED &&
+                    //        event.getDataItem().getUri().getPath().equals("/wear"))
+                    //{
+                        DataMapItem dmItem = DataMapItem.fromDataItem(event.getDataItem());
+                        Asset asset = dmItem.getDataMap().getAsset("wearRecording");
+                        Log.d("MESSAGE_RECEIVED", "onDataChanged() activated");
+                    //}
+                }
             }
         });
 
-        Wearable.getDataClient(this).addListener(onDataChangedListener);
+        Wearable.getMessageClient(this).addListener(new MessageClient.OnMessageReceivedListener() {
+            @Override
+            public void onMessageReceived(@NonNull MessageEvent messageEvent) {
+                Log.d("MESSAGE", "Got message");
+            }
+        });
 
-        // Done with wear messaging
+        Wearable.getDataClient(curActivity).addListener(onDataChangedListener);
+
+        /* Done with wear messaging */
 
         SignUpButton = findViewById(R.id.SignUpBotton);
 
@@ -88,5 +111,4 @@ public class Dashboard extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-
 }
