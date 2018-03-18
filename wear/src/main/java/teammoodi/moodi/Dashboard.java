@@ -163,7 +163,7 @@ public class Dashboard extends WearableActivity
             startActivity(intent);
 
             /*
-            *  Using a put request to send the data instead of a message
+            *  Using a put request to send the data instead of a message.
             *    Not being used currently, here just in case it can be used
             *    in the future.
 

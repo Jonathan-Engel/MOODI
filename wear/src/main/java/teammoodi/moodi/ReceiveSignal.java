@@ -27,7 +27,7 @@ public class ReceiveSignal extends WearableActivity {
         setAmbientEnabled();
     }
 
-
+    // Need to set the image to visibility=visible to make it able to be clicked
     public void emotionalImage_OnClick(View view)
     {
         Intent intent = new Intent(getApplicationContext(), Dashboard.class);
