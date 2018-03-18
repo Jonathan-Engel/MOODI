@@ -87,9 +87,6 @@ public class Dashboard extends WearableActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        Wearable.getMessageClient(this)
-                .sendMessage("Message", connectedNode.getId(),new byte[]{0,0,0});
-
         recordingTextView = findViewById(R.id.recordingText);
 
         AudioSavePathInDevice = getFilesDir().getAbsolutePath();
@@ -155,6 +152,19 @@ public class Dashboard extends WearableActivity
             Asset asset2 = Asset.createFromRef(AudioSavePathInDevice);
             Log.d("MEDIA_RECORDER_2-----", asset2.toString());
 
+            Task<Integer> sendTask = Wearable.getMessageClient(this).sendMessage(
+                    connectedNode.getId(), "/wear", asset2.getData());
+
+            Toast.makeText(mainActivity, "Recording completed", Toast.LENGTH_SHORT).show();
+
+
+
+            /*
+            *  Using a put request to send the data instead of a message
+            *    Not being used currently, here just in case it can be used
+            *    in the future.
+
+
             PutDataMapRequest dataMap = PutDataMapRequest.create(AudioSavePathInDevice);
             Log.d("MEDIA_RECORDER", "PutDataMapRequest created - " +
                   dataMap.getUri().toString());
@@ -193,8 +203,7 @@ public class Dashboard extends WearableActivity
                          dataItem.toString());
                 }
             });
-
-            Toast.makeText(mainActivity, "Recording completed", Toast.LENGTH_SHORT).show();
+            */
         }
     }
 
