@@ -111,15 +111,17 @@ public class Dashboard extends WearableActivity
 
                     Log.d("Connected phone ID: ", connectedNode.toString());
                 }
-                catch (ExecutionException execException){Log.e("0001", execException.toString());}
-                catch (InterruptedException interException){Log.e("0002", interException.toString());}
+                catch (ExecutionException execException){Log.e(
+                        "EXECUTION_EXCEPTION", execException.toString());}
+                catch (InterruptedException interException){Log.e
+                        ("INTERRUPTED_EXCEPTION", interException.toString());}
             }
         };
         thread.start();
     }
 
-    public void recordButton_OnClick(View view) {
-
+    public void recordButton_OnClick(View view)
+    {
         if (!isRecording) {
             if (checkPermission()) {
                 MediaRecorderReady();
@@ -157,7 +159,8 @@ public class Dashboard extends WearableActivity
 
             Toast.makeText(mainActivity, "Recording completed", Toast.LENGTH_SHORT).show();
 
-
+            Intent intent = new Intent(getApplicationContext(), ReceiveSignal.class);
+            startActivity(intent);
 
             /*
             *  Using a put request to send the data instead of a message
