@@ -1,53 +1,38 @@
 package teammoodi.moodi;
 
-import android.app.Activity;
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
+import android.app.ActionBar;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.net.Uri;
-import android.net.rtp.AudioStream;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.Message;
-import android.os.Parcel;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.view.View;
+
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.content.Intent;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.Asset;
-import com.google.android.gms.wearable.CapabilityClient;
-import com.google.android.gms.wearable.CapabilityInfo;
-import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
-import com.google.android.gms.wearable.WearableListenerService;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Dashboard extends AppCompatActivity {
+import teammoodi.moodi.SettingsFragment.OnSettingsFragmentInteractionListener;
 
-    private Activity curActivity = this;
-    private Button SignUpButton;
-    private Button LogInButton;
-    private Button GotoRecord;
+public class Dashboard extends AppCompatActivity
+        implements OnSettingsFragmentInteractionListener, StatisticsFragment.OnStatisticsFragmentInteractionListener, RecordFragment.OnRecordFragmentInteractionListener {
+
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,40 +75,102 @@ public class Dashboard extends AppCompatActivity {
 
         /* Done with wear messaging */
 
-        SignUpButton = findViewById(R.id.SignUpBotton);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
-        SignUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchSignUp();
-            }
-        });
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        LogInButton = findViewById(R.id.LogInButton);
-        LogInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchLogIn();
-            }
-        });
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
 
-        GotoRecord = findViewById(R.id.gotorecordbutton);
-        GotoRecord.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Record.class);
-                startActivity(intent);
-            }
-        });
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+
+                        switch(menuItem.getItemId()) {
+                            case R.id.nav_dash:
+                                ChangeFragment(new RecordFragment());
+                                break;
+                            case R.id.nav_statistics:
+                                ChangeFragment(new StatisticsFragment());
+                                break;
+                            case R.id.nav_settings:
+                                ChangeFragment(new SettingsFragment());
+                                break;
+                            case R.id.nav_logout:
+                                LogoutConfirmationFragment cf = new LogoutConfirmationFragment();
+                                //
+                                // This anon class implements the ILogoutListener
+                                //
+                                cf.SetListener(new LogoutConfirmationFragment.ILogoutListener() {
+                                    @Override
+                                    public void Logout() {
+                                        //
+                                        //The actual code to run given a positive dialog
+                                        //
+                                        PersistentCookieStore cookieStore = new PersistentCookieStore(getApplicationContext());
+                                        cookieStore.removeAll();
+                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                android.app.Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                                if (prev != null) {
+                                    ft.remove(prev);
+                                }
+                                ft.addToBackStack(null);
+                                cf.show(getFragmentManager(), "dialog");
+                                break;
+
+                        }
+                        return true;
+                    }});
+
+
+
     }
 
-    private void launchSignUp() {
-        Intent intent = new Intent(this, SignUpActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    private void launchLogIn(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+    public void ChangeFragment(Fragment f) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, f).commit();
+    }
+
+
+    @Override
+    public void onStatisticsFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onSettingsFragmentInteraction(Uri uri) {
+
     }
 }
+
+
+

@@ -11,5 +11,5 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
     }
 
-    //TODO https://www.tutorialspoint.com/android/android_login_screen.htm Look up Auth2
+
 }
