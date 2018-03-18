@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,14 +155,14 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             bIsProcessing = false;
             Toast.makeText(getActivity(), "Processing", Toast.LENGTH_SHORT).show();
             signal.playAnimation();
-            /*new AsyncProcessAudio()
-                    .execute(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.mp4");*/
+            new AsyncProcessAudio()
+                    .execute(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.m4a");
             return;
         }
         if(checkPermission()) {
 
             AudioSavePathInDevice =
-                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.mp4";
+                    Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.m4a";
 
             MediaRecorderReady();
 
@@ -213,10 +214,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     public void MediaRecorderReady(){
-        mediaRecorder= new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mediaRecorder.setAudioEncodingBitRate(256000);
+        mediaRecorder.setAudioSamplingRate(44100);
         mediaRecorder.setOutputFile(AudioSavePathInDevice);
     }
 
@@ -249,7 +252,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         @Override
         protected String doInBackground(String... params) {
             Map<String, String> p = new HashMap<String, String>(2);
-            String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "video", "video/mp4");
+            String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
             return result;
         }
 
