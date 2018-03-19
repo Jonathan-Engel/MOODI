@@ -30,7 +30,7 @@ import java.io.IOException;
 import teammoodi.moodi.SettingsFragment.OnSettingsFragmentInteractionListener;
 
 public class Dashboard extends AppCompatActivity
-        implements OnSettingsFragmentInteractionListener, StatisticsFragment.OnStatisticsFragmentInteractionListener, RecordFragment.OnRecordFragmentInteractionListener {
+        implements SettingsFragment.OnSettingsFragmentInteractionListener, StatisticsFragment.OnStatisticsFragmentInteractionListener, RecordFragment.OnRecordFragmentInteractionListener {
 
     private DrawerLayout mDrawerLayout;
 
@@ -135,9 +135,6 @@ public class Dashboard extends AppCompatActivity
                         }
                         return true;
                     }});
-
-
-
     }
 
     @Override
@@ -171,6 +168,3 @@ public class Dashboard extends AppCompatActivity
 
     }
 }
-
-
-
