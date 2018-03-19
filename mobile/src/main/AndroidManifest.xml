@@ -32,9 +32,6 @@
         <activity
             android:name=".SignUpActivity"
             android:label="@string/SignUpActivity"/>
-        <activity
-            android:name=".Record"
-            android:label="@string/RecordActivity"/>
     </application>
 
 </manifest>
