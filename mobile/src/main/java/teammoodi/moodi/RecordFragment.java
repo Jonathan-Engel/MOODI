@@ -1,8 +1,10 @@
 package teammoodi.moodi;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -23,7 +25,13 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,6 +71,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     MediaRecorder mediaRecorder;
     MediaPlayer mediaPlayer;
 
+    private SQLiteDatabase db;
+
     private OnRecordFragmentInteractionListener mListener;
     private LottieAnimationView signal;
 
@@ -96,7 +106,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
+        EmotionalResponseDB.getInstance(getActivity()).asyncWritableDatabase(new EmotionalResponseDB.OnDBReadyListener() {
+            @Override
+            public void onDBReady(SQLiteDatabase theDB) {
+                db = theDB;
+            }
+        });
     }
 
     @Override
@@ -254,15 +269,60 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         @Override
         protected String doInBackground(String... params) {
             Map<String, String> p = new HashMap<String, String>(2);
+            Map<String, Double> tonesMap = new HashMap<String, Double>();
             String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
-            return result;
+            ContentValues values = new ContentValues();
+
+            //Parse result to JSON
+            try {
+                JSONObject mainMoodiObj = new JSONObject(result);
+                if(mainMoodiObj != null){
+                    //Integer id = mainMoodiObj.getInt("id");
+                    Integer id = 1;
+                    values.put("id", id);
+                    JSONObject moodiObj = mainMoodiObj.getJSONObject("moodi");
+                    if(moodiObj != null){
+                        String transcript = moodiObj.getString("transcript");
+                        values.put("transcript",transcript);
+
+                        Double confidence = moodiObj.getDouble("confidence");
+                        values.put("confidence", confidence);
+
+                        JSONObject emotionObj = moodiObj.getJSONObject("emotion");
+                        if(emotionObj != null){
+                            JSONObject documentToneObj = emotionObj.getJSONObject("document_tone");
+                            if(documentToneObj != null){
+                                JSONArray tonesArr = documentToneObj.getJSONArray("tones");
+                                for (int i = 0; i < tonesArr.length(); i++){
+                                    tonesMap.put(
+                                            tonesArr.getJSONObject(i).getString("tone_id"),
+                                            tonesArr.getJSONObject(i).getDouble("score")
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+                db.insert("responseHistory", null, values);
+
+
+
+            } catch (JSONException e){
+                Log.e("Moodi-App", "Broken JSON exception in Record Fragment", e);
+            }
+
+            return "";
         }
 
         @Override
         protected void onPostExecute(String result) {
-            return;
+            //Change activity
         }
-
     }
 
 
