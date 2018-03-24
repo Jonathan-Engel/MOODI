@@ -4,8 +4,8 @@ import { Request, Response } from "express";
 const transporter = nodemailer.createTransport({
   service: "SendGrid",
   auth: {
-    user: process.env.SENDGRID_USER,
-    pass: process.env.SENDGRID_PASSWORD
+    user: "moodi123",
+    pass: "moodi1234"
   }
 });
 
@@ -35,14 +35,17 @@ export let postContact = (req: Request, res: Response) => {
     return res.redirect("/contact");
   }
 
-  const mailOptions = {
-    to: "your@email.com",
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey("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");
+const msg = {
+    to: "shreyajacob1995@gmail.com",
     from: `${req.body.name} <${req.body.email}>`,
     subject: "Contact Form",
     text: req.body.message
   };
+  sgMail.send(msg);
 
-  transporter.sendMail(mailOptions, (err) => {
+  transporter.sendMail(sgMail, (err) => {
     if (err) {
       req.flash("errors", { msg: err.message });
       return res.redirect("/contact");
@@ -51,3 +54,5 @@ export let postContact = (req: Request, res: Response) => {
     res.redirect("/contact");
   });
 };
+
+

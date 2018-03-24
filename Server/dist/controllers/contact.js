@@ -4,8 +4,8 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
     service: "SendGrid",
     auth: {
-        user: process.env.SENDGRID_USER,
-        pass: process.env.SENDGRID_PASSWORD
+        user: "moodi123",
+        pass: "moodi1234"
     }
 });
 /**
@@ -30,13 +30,16 @@ exports.postContact = (req, res) => {
         req.flash("errors", errors);
         return res.redirect("/contact");
     }
-    const mailOptions = {
-        to: "your@email.com",
+    const sgMail = require("@sendgrid/mail");
+    sgMail.setApiKey("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");
+    const msg = {
+        to: "shreyajacob1995@gmail.com",
         from: `${req.body.name} <${req.body.email}>`,
         subject: "Contact Form",
         text: req.body.message
     };
-    transporter.sendMail(mailOptions, (err) => {
+    sgMail.send(msg);
+    transporter.sendMail(sgMail, (err) => {
         if (err) {
             req.flash("errors", { msg: err.message });
             return res.redirect("/contact");
