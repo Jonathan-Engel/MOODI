@@ -281,21 +281,26 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 if(mainMoodiObj != null){
                     Integer id = mainMoodiObj.getInt("id");
                     values.put("id", id);
+
                     JSONObject moodiObj = mainMoodiObj.getJSONObject("moodi");
                     if(moodiObj != null){
-                        String transcript = moodiObj.getString("transcript");
-                        values.put("transcript",transcript);
 
-                        Double confidence = moodiObj.getDouble("confidence");
-                        values.put("confidence", confidence);
+                        JSONObject transcriptObj = moodiObj.getJSONObject("transcript");
+                        if (transcriptObj != null) {
+                            String text = transcriptObj.getString("text");
+                            values.put("transcript", text);
+
+                            Double confidence = transcriptObj.getDouble("confidence");
+                            values.put("confidence", confidence);
+                        }
 
                         JSONObject emotionObj = moodiObj.getJSONObject("emotion");
-
-                        if(emotionObj != null){
-                            JSONObject documentToneObj = emotionObj.getJSONObject("document_tone");
-                            if(documentToneObj != null){
-                                JSONArray tonesArr = documentToneObj.getJSONArray("tones");
-                                for (int i = 0; i < tonesArr.length(); i++){
+                        if (emotionObj != null){
+                            JSONObject document_tone1 = emotionObj.getJSONObject("document_tone"); //Cancer cause Dustin is silly
+                            JSONObject document_tone2 = document_tone1.getJSONObject("document_tone");
+                            if(document_tone2 != null){
+                                JSONArray tonesArr = document_tone2.getJSONArray("tones");
+                                for (int i = 0; i < tonesArr.length(); i++) {
                                     values.put(
                                             tonesArr.getJSONObject(i).getString("tone_id"),
                                             tonesArr.getJSONObject(i).getDouble("score")
@@ -304,10 +309,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                             }
                         }
                     }
+
+
+                    db.insert("responseHistory", null, values);
                 }
-
-                db.insert("responseHistory", null, values);
-
             } catch (JSONException e){
                 Log.e("Moodi-App", "Failed to parse response/upload it to the database", e);
             }
