@@ -30,7 +30,9 @@ import java.io.IOException;
 import teammoodi.moodi.SettingsFragment.OnSettingsFragmentInteractionListener;
 
 public class Dashboard extends AppCompatActivity
-        implements SettingsFragment.OnSettingsFragmentInteractionListener, StatisticsFragment.OnStatisticsFragmentInteractionListener, RecordFragment.OnRecordFragmentInteractionListener {
+        implements SettingsFragment.OnSettingsFragmentInteractionListener,
+        StatisticsFragment.OnStatisticsFragmentInteractionListener, HistoryFragment.OnHistoryFragmentInteractionListener,
+        RecordFragment.OnRecordFragmentInteractionListener {
 
     private DrawerLayout mDrawerLayout;
 
@@ -100,6 +102,9 @@ public class Dashboard extends AppCompatActivity
                             case R.id.nav_dash:
                                 ChangeFragment(new RecordFragment());
                                 break;
+                            case R.id.nav_history:
+                                ChangeFragment(new HistoryFragment());
+                                break;
                             case R.id.nav_statistics:
                                 ChangeFragment(new StatisticsFragment());
                                 break;
@@ -165,6 +170,11 @@ public class Dashboard extends AppCompatActivity
 
     @Override
     public void onSettingsFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onHistoryFragmentInteraction(Uri uri) {
 
     }
 }
