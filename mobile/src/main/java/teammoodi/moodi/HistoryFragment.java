@@ -50,7 +50,7 @@ public class HistoryFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1
+     * @param param1 Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment HistoryFragment.
      */
@@ -105,15 +105,6 @@ public class HistoryFragment extends Fragment {
 
         moodiResultArrayList = new ArrayList<>();
         moodiResultArrayList = EmotionalResponseDB.theDb.moodiResultArrayList();
-
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
 
         recyclerView = v.findViewById(R.id.results_recycler_view);
         adapter = new ResultAdapter(moodiResultArrayList);
