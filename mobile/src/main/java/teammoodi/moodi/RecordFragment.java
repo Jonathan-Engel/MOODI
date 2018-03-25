@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.animation.content.Content;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -106,12 +107,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        EmotionalResponseDB.getInstance(getActivity()).asyncWritableDatabase(new EmotionalResponseDB.OnDBReadyListener() {
-            @Override
-            public void onDBReady(SQLiteDatabase theDB) {
-                db = theDB;
-            }
-        });
+
     }
 
     @Override
@@ -174,6 +170,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
             new AsyncProcessAudio()
                     .execute(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.m4a");
+
             return;
         }
         if(checkPermission()) {
@@ -256,7 +253,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private class AsyncProcessAudio extends AsyncTask<String, String, String>
+    private class AsyncProcessAudio extends AsyncTask<String, ContentValues, ContentValues>
     {
         HttpURLConnection conn;
         URL url = null;
@@ -267,7 +264,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
         }
         @Override
-        protected String doInBackground(String... params) {
+        protected ContentValues doInBackground(String... params) {
             Map<String, String> p = new HashMap<String, String>(2);
             Map<String, Double> tonesMap = new HashMap<String, Double>();
 
@@ -310,19 +307,25 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                         }
                     }
 
+                    return values;
 
-                    db.insert("responseHistory", null, values);
                 }
             } catch (JSONException e){
                 Log.e("Moodi-App", "Failed to parse response/upload it to the database", e);
             }
 
-            return "";
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            //Change activity
+        protected void onPostExecute(ContentValues result) {
+            if (result == null)
+            {
+                return;
+            }
+
+            EmotionalResponseDB db = EmotionalResponseDB.getInstance(getActivity());
+            db.AddResult(result);
         }
     }
 

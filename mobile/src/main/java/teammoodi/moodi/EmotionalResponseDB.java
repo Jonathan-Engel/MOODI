@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.List;
  */
 
 public class EmotionalResponseDB extends SQLiteOpenHelper {
+
+    private static final String TAG = "moodi";
 
     interface OnDBReadyListener {
         void onDBReady(SQLiteDatabase theDB);
@@ -31,14 +34,14 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
                     "timestamp STRING, " +
                     "transcript STRING, " +
                     "location STRING, " +
-                    "confidence REAL, " +
-                    "anger REAL, " +
-                    "fear REAL," +
-                    "joy REAL," +
-                    "sadness REAL," +
-                    "analytical REAL," +
-                    "confident REAL," +
-                    "tentative REAL)";
+                    "confidence REAL DEFAULT 0, " +
+                    "anger REAL DEFAULT 0, " +
+                    "fear REAL DEFAULT 0," +
+                    "joy REAL DEFAULT 0," +
+                    "sadness REAL DEFAULT 0," +
+                    "analytical REAL DEFAULT 0," +
+                    "confident REAL DEFAULT 0," +
+                    "tentative REAL DEFAULT 0)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS responseHistory";
@@ -56,6 +59,58 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
             theDb = new EmotionalResponseDB(context.getApplicationContext());
         }
         return theDb;
+    }
+
+    public void AddResult(ContentValues content) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            db.insertOrThrow("responseHistory", null, content);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to add post to database");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public ArrayList<MoodiResult> GetResults(int count) {
+        String RESULTS_QUERY =
+                String.format("SELECT * FROM responseHistory LIMIT %d OFFSET (SELECT COUNT(*) FROM responseHistory) - %d;",
+                        count, count);
+
+        ArrayList<MoodiResult> moodiResultArrayList = new ArrayList<>();
+        MoodiResult moodiResult;
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(RESULTS_QUERY, null);
+        try {
+            if (cursor.moveToLast()) {
+                do {
+                    moodiResult = new MoodiResult();
+                    moodiResult.setTranscript(cursor.getString(cursor.getColumnIndex("transcript")));
+                    moodiResult.setConfidence(cursor.getString(cursor.getColumnIndex("confidence")));
+
+                    moodiResult.setAnger(cursor.getString(cursor.getColumnIndex("anger")));
+                    moodiResult.setSadness(cursor.getString(cursor.getColumnIndex("sadness")));
+                    moodiResult.setFear(cursor.getString(cursor.getColumnIndex("fear")));
+                    moodiResult.setJoy(cursor.getString(cursor.getColumnIndex("joy")));
+                    moodiResult.setAnalytical(cursor.getString(cursor.getColumnIndex("analytical")));
+                    moodiResult.setConfident(cursor.getString(cursor.getColumnIndex("confident")));
+                    moodiResult.setTentative(cursor.getString(cursor.getColumnIndex("tentative")));
+
+                    moodiResultArrayList.add(moodiResult);
+                } while(cursor.moveToPrevious());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get posts from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return moodiResultArrayList;
     }
 
     @Override
@@ -82,35 +137,6 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
         new OpenDbAsyncTask().execute(listener);
     }
 
-    public ArrayList<MoodiResult> moodiResultArrayList() {
-        String query = "SELECT * FROM responseHistory LIMIT 10 OFFSET (SELECT COUNT(*) FROM responseHistory) - 10;";
-
-        ArrayList<MoodiResult> moodiResultArrayList = new ArrayList<>();
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        MoodiResult moodiResult;
-
-        if ((cursor.moveToFirst())) {
-            do {
-                moodiResult = new MoodiResult();
-
-                moodiResult.setTranscript(cursor.getString(cursor.getColumnIndex("transcript")));
-                moodiResult.setConfidence(cursor.getString(cursor.getColumnIndex("confidence")));
-
-                moodiResult.setAnger(cursor.getString(cursor.getColumnIndex("anger")));
-                moodiResult.setSadness(cursor.getString(cursor.getColumnIndex("sadness")));
-                moodiResult.setFear(cursor.getString(cursor.getColumnIndex("fear")));
-                moodiResult.setJoy(cursor.getString(cursor.getColumnIndex("joy")));
-                moodiResult.setAnalytical(cursor.getString(cursor.getColumnIndex("analytical")));
-                moodiResult.setConfident(cursor.getString(cursor.getColumnIndex("confident")));
-                moodiResult.setTentative(cursor.getString(cursor.getColumnIndex("tentative")));
-
-                moodiResultArrayList.add(moodiResult);
-            } while (cursor.moveToNext());
-        }
-
-        return moodiResultArrayList;
-    }
 
     public static class OpenDbAsyncTask extends AsyncTask<OnDBReadyListener,Void,SQLiteDatabase> {
         OnDBReadyListener listener;

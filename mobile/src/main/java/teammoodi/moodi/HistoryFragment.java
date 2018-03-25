@@ -28,9 +28,6 @@ public class HistoryFragment extends Fragment {
     private ResultAdapter adapter;
     private ArrayList<MoodiResult> moodiResultArrayList;
 
-    SQLiteDatabase db;
-    long currentRow;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,13 +65,6 @@ public class HistoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EmotionalResponseDB.getInstance(getContext()).getReadableDatabase(new EmotionalResponseDB.OnDBReadyListener() {
-            @Override
-            public void onDBReady(SQLiteDatabase thedb) {
-                db = thedb;
-            }
-        });
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -84,18 +74,11 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        EmotionalResponseDB.getInstance(getContext()).getReadableDatabase(new EmotionalResponseDB.OnDBReadyListener() {
-            @Override
-            public void onDBReady(SQLiteDatabase thedb) {
-                db = thedb;
-            }
-        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        db.close();
     }
 
     @Override
@@ -103,9 +86,7 @@ public class HistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
-        moodiResultArrayList = new ArrayList<>();
-        moodiResultArrayList = EmotionalResponseDB.theDb.moodiResultArrayList();
-
+        moodiResultArrayList = EmotionalResponseDB.getInstance(getActivity()).GetResults(10);
         recyclerView = v.findViewById(R.id.results_recycler_view);
         adapter = new ResultAdapter(moodiResultArrayList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
