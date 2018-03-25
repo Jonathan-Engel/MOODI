@@ -15,6 +15,10 @@ public class MoodiResult {
     private String confidence;
     private String anger;
 
+    public MoodiResult() {
+
+    }
+
     public MoodiResult(String confidence, String anger, String sadness, String fear, String joy, String analytical, String confident, String tentative, String transcript) {
         this.confidence = confidence;
         this.anger = anger;

@@ -1,5 +1,6 @@
 package teammoodi.moodi;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import android.content.ContentValues;
@@ -8,19 +9,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by jonathan on 3/24/18.
  */
 
 public class EmotionalResponseDB extends SQLiteOpenHelper {
 
-
     interface OnDBReadyListener {
         void onDBReady(SQLiteDatabase theDB);
     }
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "emotionalResponse.db";
+    public static final String DATABASE_NAME = "emotionalResponse.db";
 
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE responseHistory (" +
@@ -40,8 +43,8 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS responseHistory";
 
-    private static EmotionalResponseDB theDb;
-    private Context appContext;
+    public static EmotionalResponseDB theDb;
+    public Context appContext;
 
     private EmotionalResponseDB(Context context) {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -71,11 +74,45 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    public void getReadableDatabase(OnDBReadyListener listener) {
+        new OpenDbAsyncTask().execute(listener);
+    }
+
     public void asyncWritableDatabase(OnDBReadyListener listener) {
         new OpenDbAsyncTask().execute(listener);
     }
 
-    private static class OpenDbAsyncTask extends AsyncTask<OnDBReadyListener,Void,SQLiteDatabase> {
+    public ArrayList<MoodiResult> moodiResultArrayList() {
+        String query = "SELECT * FROM responseHistory LIMIT 10 OFFSET (SELECT COUNT(*) FROM responseHistory) - 10;";
+
+        ArrayList<MoodiResult> moodiResultArrayList = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        MoodiResult moodiResult;
+
+        if ((cursor.moveToFirst())) {
+            do {
+                moodiResult = new MoodiResult();
+
+                moodiResult.setTranscript(cursor.getString(cursor.getColumnIndex("transcript")));
+                moodiResult.setConfidence(cursor.getString(cursor.getColumnIndex("confidence")));
+
+                moodiResult.setAnger(cursor.getString(cursor.getColumnIndex("anger")));
+                moodiResult.setSadness(cursor.getString(cursor.getColumnIndex("sadness")));
+                moodiResult.setFear(cursor.getString(cursor.getColumnIndex("fear")));
+                moodiResult.setJoy(cursor.getString(cursor.getColumnIndex("joy")));
+                moodiResult.setAnalytical(cursor.getString(cursor.getColumnIndex("analytical")));
+                moodiResult.setConfident(cursor.getString(cursor.getColumnIndex("confident")));
+                moodiResult.setTentative(cursor.getString(cursor.getColumnIndex("tentative")));
+
+                moodiResultArrayList.add(moodiResult);
+            } while (cursor.moveToNext());
+        }
+
+        return moodiResultArrayList;
+    }
+
+    public static class OpenDbAsyncTask extends AsyncTask<OnDBReadyListener,Void,SQLiteDatabase> {
         OnDBReadyListener listener;
 
         @Override
