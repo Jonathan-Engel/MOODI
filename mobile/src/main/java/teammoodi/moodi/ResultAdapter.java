@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by ahb5190 on 3/24/18.
@@ -31,6 +32,9 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
+        holder.primaryTextView.setText(
+                dataList.get(position).getPrimaryEmotion() + ": " + dataList.get(position).getPrimaryEmotionScore());
+
         holder.angerTextView.setText(dataList.get(position).getAnger());
         holder.sadnessTextView.setText(dataList.get(position).getSadness());
         holder.fearTextView.setText(dataList.get(position).getFear());
@@ -50,7 +54,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
     class ResultViewHolder extends RecyclerView.ViewHolder {
 
         TextView angerTextView, sadnessTextView, fearTextView, joyTextView, analyticalTextView,
-                confidentTextView, tentativeTextView, transcriptTextView, confidenceTextView;
+                confidentTextView, tentativeTextView, transcriptTextView, confidenceTextView, primaryTextView;
 
         ResultViewHolder(View view) {
             super(view);
@@ -63,6 +67,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
             tentativeTextView = view.findViewById(R.id.tentativeTextView);
             transcriptTextView = view.findViewById(R.id.transcriptTextView);
             confidenceTextView = view.findViewById(R.id.confidenceTextView);
+            primaryTextView = view.findViewById(R.id.primaryTextView);
         }
     }
 }

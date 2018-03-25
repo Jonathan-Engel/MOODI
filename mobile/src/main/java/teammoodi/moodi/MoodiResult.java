@@ -1,5 +1,8 @@
 package teammoodi.moodi;
 
+import android.support.annotation.NonNull;
+import android.support.v7.util.SortedList;
+
 /**
  * Created by ahb5190 on 3/24/18.
  */
@@ -19,31 +22,33 @@ public class MoodiResult {
 
     }
 
-    public MoodiResult(String confidence, String anger, String sadness, String fear, String joy, String analytical, String confident, String tentative, String transcript) {
-        this.confidence = confidence;
-        this.anger = anger;
-        this.sadness = sadness;
-        this.fear = fear;
-        this.joy = joy;
-        this.analytical = analytical;
-        this.confident = confident;
-        this.tentative = tentative;
-        this.transcript = transcript;
+    private String primaryEmotion = "None";
+    private Double primaryEmotionScore = 0.0;
+
+    public String getPrimaryEmotion() {
+        return primaryEmotion;
+    }
+
+    public String getPrimaryEmotionScore() {
+        return primaryEmotionScore.toString();
     }
 
     public String getConfidence() {
         return confidence;
     }
 
-    public void setConfidence(String confidence) {
-        this.confidence = confidence;
-    }
+    public void setConfidence(String confidence) { this.confidence = confidence; }
 
     public String getAnger() {
+
         return anger;
     }
 
     public void setAnger(String anger) {
+        if (!Double.valueOf(anger).equals(0) && Double.compare(Double.valueOf(anger), primaryEmotionScore) > 0) {
+            primaryEmotion = "Anger";
+            primaryEmotionScore = Double.valueOf(anger);
+        }
         this.anger = anger;
     }
 
@@ -52,6 +57,10 @@ public class MoodiResult {
     }
 
     public void setSadness(String sadness) {
+        if (!Double.valueOf(sadness).equals(0) && Double.compare(Double.valueOf(sadness), primaryEmotionScore) > 0) {
+            primaryEmotion = "Sadness";
+            primaryEmotionScore = Double.valueOf(sadness);
+        }
         this.sadness = sadness;
     }
 
@@ -60,6 +69,10 @@ public class MoodiResult {
     }
 
     public void setFear(String fear) {
+        if (!Double.valueOf(fear).equals(0) && Double.compare(Double.valueOf(fear), primaryEmotionScore) > 0) {
+            primaryEmotion = "Fear";
+            primaryEmotionScore = Double.valueOf(fear);
+        }
         this.fear = fear;
     }
 
@@ -68,6 +81,10 @@ public class MoodiResult {
     }
 
     public void setJoy(String joy) {
+        if (!Double.valueOf(joy).equals(0) && Double.compare(Double.valueOf(joy), primaryEmotionScore) > 0) {
+            primaryEmotion = "Joy";
+            primaryEmotionScore = Double.valueOf(joy);
+        }
         this.joy = joy;
     }
 
@@ -76,6 +93,10 @@ public class MoodiResult {
     }
 
     public void setAnalytical(String analytical) {
+        if (!Double.valueOf(analytical).equals(0) && Double.compare(Double.valueOf(analytical), primaryEmotionScore) > 0) {
+            primaryEmotion = "Analytical";
+            primaryEmotionScore = Double.valueOf(analytical);
+        }
         this.analytical = analytical;
     }
 
@@ -84,6 +105,10 @@ public class MoodiResult {
     }
 
     public void setConfident(String confident) {
+        if (!Double.valueOf(confident).equals(0) && Double.compare(Double.valueOf(confident), primaryEmotionScore) > 0) {
+            primaryEmotion = "Confident";
+            primaryEmotionScore = Double.valueOf(confident);
+        }
         this.confident = confident;
     }
 
@@ -92,6 +117,10 @@ public class MoodiResult {
     }
 
     public void setTentative(String tentative) {
+        if (!Double.valueOf(tentative).equals(0) && Double.compare(Double.valueOf(tentative), primaryEmotionScore) > 0) {
+            primaryEmotion = "Tentative";
+            primaryEmotionScore = Double.valueOf(tentative);
+        }
         this.tentative = tentative;
     }
 
@@ -102,8 +131,5 @@ public class MoodiResult {
     public void setTranscript(String transcript) {
         this.transcript = transcript;
     }
-
-
-
 
 }
