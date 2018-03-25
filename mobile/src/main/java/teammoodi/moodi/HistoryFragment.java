@@ -1,6 +1,7 @@
 package teammoodi.moodi;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,11 +22,14 @@ import java.util.ArrayList;
  * Use the {@link HistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HistoryFragment extends Fragment{
+public class HistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ResultAdapter adapter;
     private ArrayList<MoodiResult> moodiResultArrayList;
+
+    SQLiteDatabase db;
+    long currentRow;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,10 +67,35 @@ public class HistoryFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        EmotionalResponseDB.getInstance(getContext()).getReadableDatabase(new EmotionalResponseDB.OnDBReadyListener() {
+            @Override
+            public void onDBReady(SQLiteDatabase thedb) {
+                db = thedb;
+            }
+        });
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EmotionalResponseDB.getInstance(getContext()).getReadableDatabase(new EmotionalResponseDB.OnDBReadyListener() {
+            @Override
+            public void onDBReady(SQLiteDatabase thedb) {
+                db = thedb;
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        db.close();
     }
 
     @Override
@@ -75,14 +104,7 @@ public class HistoryFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
         moodiResultArrayList = new ArrayList<>();
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
-        moodiResultArrayList .add(new MoodiResult("1%", "emp1@example.com",
-                "123456789", "123", "12345", "122", "22", "44", "Deeeez nuts"));
+        moodiResultArrayList = EmotionalResponseDB.theDb.moodiResultArrayList();
 
         recyclerView = v.findViewById(R.id.results_recycler_view);
         adapter = new ResultAdapter(moodiResultArrayList);

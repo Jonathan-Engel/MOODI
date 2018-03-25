@@ -1,5 +1,8 @@
 package teammoodi.moodi;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +16,7 @@ import java.util.ArrayList;
  */
 
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultViewHolder> {
-
-    private ArrayList<MoodiResult> dataList;
+    ArrayList<MoodiResult> dataList;
 
     public ResultAdapter(ArrayList<MoodiResult> dataList) {
         this.dataList = dataList;
