@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 
 import android.util.Log;
@@ -326,6 +327,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
             EmotionalResponseDB db = EmotionalResponseDB.getInstance(getActivity());
             db.AddResult(result);
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
         }
     }
 
