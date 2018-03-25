@@ -3,6 +3,7 @@
     <string name="welcome_to">Welcome to.....</string>
     <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>
+    <string name="log_out">Log Out</string>
     <string name="todo">TODO</string>
     <string name="title_activity_login">Sign in</string>
 
@@ -42,5 +43,6 @@
     <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
+    <string name="history">History</string>
 </resources>
 

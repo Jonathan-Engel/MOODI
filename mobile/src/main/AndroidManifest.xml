@@ -29,9 +29,6 @@
         <activity
             android:name=".Dashboard"
             android:label="@string/home"/>
-        <activity
-            android:name=".SignUpActivity"
-            android:label="@string/SignUpActivity"/>
     </application>
 
 </manifest>
