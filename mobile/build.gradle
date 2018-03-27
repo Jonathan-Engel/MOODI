@@ -32,4 +32,5 @@ dependencies {
     wearApp project(':wear')
     implementation 'com.google.android.gms:play-services-wearable:+'
     compile 'com.airbnb.android:lottie:2.5.0-rc1'
+    compile 'com.github.jrejaud:WearSocket:1.0.+'
 }
