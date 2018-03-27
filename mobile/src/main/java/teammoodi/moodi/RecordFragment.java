@@ -133,8 +133,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             @Override
             public void dataChanged(String s, Object o) {
                 Asset dataItem = (Asset)o;
-                new AsyncProcessAudio().execute(dataItem.getUri().getPath());
-            }// dataItem.getDigest()?
+                new AsyncProcessAudio().execute("/teammoodi/moodi/wear");
+            }// dataItem.getDigest() or dataItem.getUri().getPath()?
         };
         /*
          * End of WearSocket use
