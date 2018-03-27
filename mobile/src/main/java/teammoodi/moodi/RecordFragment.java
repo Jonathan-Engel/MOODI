@@ -328,7 +328,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             EmotionalResponseDB db = EmotionalResponseDB.getInstance(getActivity());
             db.AddResult(result);
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
+            if (fragmentManager == null)
+                return;
+            else
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
         }
     }
 
