@@ -49,9 +49,8 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize  AsyncLogin() class with email and password
         new AsyncLogin().execute("test123@gmail.com", "test123");
-
+        //new AsyncLogin().execute(email, password);
     }
-
 
     private class AsyncLogin extends AsyncTask<String, String, String>
     {
