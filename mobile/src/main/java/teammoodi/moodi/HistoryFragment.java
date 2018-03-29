@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -87,6 +88,7 @@ public class HistoryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
         moodiResultArrayList = EmotionalResponseDB.getInstance(getActivity()).GetResults(10);
+
         recyclerView = v.findViewById(R.id.results_recycler_view);
         adapter = new ResultAdapter(moodiResultArrayList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
