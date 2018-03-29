@@ -46,37 +46,37 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/angerTextView"
+                android:id="@+id/firstTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/sadnessTextView"
+                android:id="@+id/secondTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/fearTextView"
+                android:id="@+id/thirdTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/joyTextView"
+                android:id="@+id/forthTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/analyticalTextView"
+                android:id="@+id/fifthTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/tentativeTextView"
+                android:id="@+id/sixthTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/confidentTextView"
+                android:id="@+id/seventhTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
