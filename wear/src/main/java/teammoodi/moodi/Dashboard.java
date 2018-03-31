@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.jrejaud.wear_socket.WearSocket;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -81,11 +82,24 @@ public class Dashboard extends WearableActivity
 
     Node connectedNode;
 
+    WearSocket wearSocket;
+    String androidWearCapability;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        // Setting up the wearSocket
+        wearSocket = WearSocket.getInstance();
+        androidWearCapability = "voice_transcription";
+        wearSocket.setupAndConnect(this, androidWearCapability, new WearSocket.onErrorListener() {
+            @Override
+            public void onError(Throwable throwable) {
+                Log.d("wearSocket", "wearSocket.setupAndConnect error: " + throwable);
+            }
+        });
 
         recordingTextView = findViewById(R.id.recordingText);
 
@@ -108,8 +122,10 @@ public class Dashboard extends WearableActivity
                         if (node.isNearby())
                             connectedNode = node; // connectedNode is the phone
                     }
-
-                    Log.d("Connected phone ID: ", connectedNode.toString());
+                    if (connectedNode != null)
+                        Log.d("Connected phone ID ", connectedNode.toString());
+                    else
+                        Log.d("Connected phone NULL", "No connected phone");
                 }
                 catch (ExecutionException execException){Log.e(
                         "EXECUTION_EXCEPTION", execException.toString());}
@@ -135,7 +151,6 @@ public class Dashboard extends WearableActivity
                     e.printStackTrace();
                 }
 
-
                 Log.d("MEDIA_RECORDER", Uri.parse(AudioSavePathInDevice).toString());
 
                 recordingTextView.setText(R.string.stop_recording);
@@ -151,12 +166,12 @@ public class Dashboard extends WearableActivity
             recordingTextView.setText(R.string.start_recording);
             isRecording = false;
 
-            Asset asset2 = Asset.createFromRef(AudioSavePathInDevice);
-            Log.d("MEDIA_RECORDER_2-----", asset2.toString());
+            Asset asset = Asset.createFromRef(AudioSavePathInDevice);
+            // Does createFromRef work with the path?
+            Log.d("MEDIA_RECORDER_2-----", asset.toString());
 
-            Task<Integer> sendTask = Wearable.getMessageClient(this).sendMessage(
-                    connectedNode.getId(), "/wear", asset2.getData());
-
+            wearSocket.updateDataItem("/teammoodi/moodi/wear", "wearRecording", asset);
+            // Try AudioSavePathInDevice instead of /teammoodi/moodi/wear
             Toast.makeText(mainActivity, "Recording completed", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(getApplicationContext(), ReceiveSignal.class);

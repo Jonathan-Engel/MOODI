@@ -26,6 +26,9 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.animation.content.Content;
+import com.github.jrejaud.wear_socket.WearSocket;
+import com.google.android.gms.wearable.Asset;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -78,6 +81,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private OnRecordFragmentInteractionListener mListener;
     private LottieAnimationView signal;
 
+    WearSocket wearSocket;
+    String androidWearCapability;
+
     public RecordFragment() {
         // Required empty public constructor
     }
@@ -107,6 +113,34 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        /*
+         * Using WearSocket to get the data changed from the watch
+         */
+        wearSocket = WearSocket.getInstance();
+        androidWearCapability = "voice_transcription";
+        wearSocket.setupAndConnect(getContext(), androidWearCapability, new WearSocket.onErrorListener() {
+            @Override
+            public void onError(Throwable throwable) {
+                Log.d("wearSocket", "wearSocket.setupAndConnect error: " + throwable);
+            }
+        });
+
+        wearSocket.startDataListener(getContext(), "/teammoodi/moodi/wear");
+        wearSocket.setKeyDataType("wearRecording", new TypeToken<Asset>(){}.getType());
+
+        Log.d("WEAR_SOCKET", "Setup, connect, and startListener completed");
+
+        WearSocket.DataListener dataListener = new WearSocket.DataListener() {
+            @Override
+            public void dataChanged(String s, Object o) {
+                Log.d("WEAR_SOCKET", "dataListener dataChanged begun");
+                Asset dataItem = (Asset)o;
+                new AsyncProcessAudio().execute("/teammoodi/moodi/wear");
+            }// The AudioSavePathInDevice from the wear instead of the above?
+        };
+        /*
+         * End of WearSocket use
+         */
 
 
     }
