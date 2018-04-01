@@ -3,6 +3,7 @@ package teammoodi.moodi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.icu.text.AlphabeticIndex;
@@ -11,6 +12,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -23,50 +26,27 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.jrejaud.wear_socket.WearSocket;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Asset;
-import com.google.android.gms.wearable.CapabilityApi;
-import com.google.android.gms.wearable.CapabilityClient;
-import com.google.android.gms.wearable.CapabilityInfo;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataClient;
 import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataItemAsset;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.MessageClient;
-import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.NodeClient;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
-import com.google.android.gms.wearable.WearableListenerService;
-import com.google.android.wearable.intent.RemoteIntent;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.provider.CalendarContract.CalendarCache.URI;
 
 public class Dashboard extends WearableActivity
 {
@@ -82,29 +62,16 @@ public class Dashboard extends WearableActivity
 
     Node connectedNode;
 
-    WearSocket wearSocket;
-    String androidWearCapability;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        // Setting up the wearSocket
-        wearSocket = WearSocket.getInstance();
-        androidWearCapability = "voice_transcription";
-        wearSocket.setupAndConnect(this, androidWearCapability, new WearSocket.onErrorListener() {
-            @Override
-            public void onError(Throwable throwable) {
-                Log.d("wearSocket", "wearSocket.setupAndConnect error: " + throwable);
-            }
-        });
-
         recordingTextView = findViewById(R.id.recordingText);
 
-        AudioSavePathInDevice = getFilesDir().getAbsolutePath();
-        AudioSavePathInDevice += "/WearAudio.mp4";
+        AudioSavePathInDevice = getApplicationContext().getFilesDir().getAbsolutePath();
+        AudioSavePathInDevice += "/WearAudio.m4a";
 
         Log.d("MEDIA_RECORDER", "AudioSavePathInDevice - " + AudioSavePathInDevice);
 
@@ -166,17 +133,31 @@ public class Dashboard extends WearableActivity
             recordingTextView.setText(R.string.start_recording);
             isRecording = false;
 
-            Asset asset = Asset.createFromRef(AudioSavePathInDevice);
-            // Does createFromRef work with the path?
-            Log.d("MEDIA_RECORDER_2-----", asset.toString());
-
-            wearSocket.updateDataItem("/teammoodi/moodi/wear", "wearRecording", asset);
-            // Try AudioSavePathInDevice instead of /teammoodi/moodi/wear
             Toast.makeText(mainActivity, "Recording completed", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(getApplicationContext(), ReceiveSignal.class);
             startActivity(intent);
 
+            try {
+                FileInputStream fileInputStream = new FileInputStream(AudioSavePathInDevice);
+                Log.d("FILE_INPUT", ".available(): " + fileInputStream.available());
+
+                byte[] bArr = new byte[fileInputStream.available()];
+                Log.d("FILE_INPUT", "bArr.toString(): " + bArr.toString());
+                Log.d("FILE_INPUT", "bArr.length(BEFORE): " + bArr.length);
+
+                fileInputStream.read(bArr, 0, bArr.length);
+                Log.d("FILE_INPUT", "bArr.length(AFTER): " + bArr.length);
+                Log.d("FILE_INPUT", "bArr.toString(AFTER)" + bArr.toString());
+
+                Wearable.getMessageClient(this)
+                        .sendMessage(connectedNode.getId(),
+                        "/teammoodi/moodi/wear", bArr);
+
+                Log.d("MESSAGE_CLIENT", "Message sent");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             /*
             *  Using a put request to send the data instead of a message.
             *    Not being used currently, here just in case it can be used
@@ -187,7 +168,7 @@ public class Dashboard extends WearableActivity
             Log.d("MEDIA_RECORDER", "PutDataMapRequest created - " +
                   dataMap.getUri().toString());
 
-            dataMap.getDataMap().putAsset("wearRecording", asset2);
+            dataMap.getDataMap().putAsset("wearRecording", asset);
             Log.d("MEDIA_RECORDER", "dataMap asset put - " +
                   dataMap.getDataMap().toString());
 
@@ -260,10 +241,12 @@ public class Dashboard extends WearableActivity
 
     public void MediaRecorderReady()
     {
-        mediaRecorder= new MediaRecorder();
+        mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mediaRecorder.setAudioEncodingBitRate(256000);
+        mediaRecorder.setAudioSamplingRate(44100);
         mediaRecorder.setOutputFile(AudioSavePathInDevice);
         Log.d("MEDIA_RECORDER_READY", "MediaRecorderReady() complete");
     }

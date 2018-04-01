@@ -13,22 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.content.Intent;
 
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.MessageClient;
-import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Wearable;
-
-import java.io.FileWriter;
-import java.io.IOException;
-
-import teammoodi.moodi.SettingsFragment.OnSettingsFragmentInteractionListener;
-
 public class Dashboard extends AppCompatActivity
         implements SettingsFragment.OnSettingsFragmentInteractionListener,
         StatisticsFragment.OnStatisticsFragmentInteractionListener, HistoryFragment.OnHistoryFragmentInteractionListener,
@@ -40,42 +24,6 @@ public class Dashboard extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        /*
-        Listen for wear sending a message
-        */
-
-        Wearable.getMessageClient(this).addListener(new MessageClient.OnMessageReceivedListener() {
-            @Override
-            public void onMessageReceived(@NonNull MessageEvent messageEvent) {
-                Log.d("MESSAGE_RECEIVED", "Got message");
-                Log.d("MESSAGE_RECEIVED", "MessageEvent - getData() - " +
-                        messageEvent.getData().toString());
-                Log.d("MESSAGE_RECEIVED", "MessageEvent - getPath() - " +
-                        messageEvent.getPath());
-                Uri uri = Uri.parse(messageEvent.getPath());
-                try
-                {
-                    MediaStore.Audio.Media.getContentUriForPath(messageEvent.getPath());
-                    FileWriter fw = new FileWriter(
-                            Environment.getExternalStorageDirectory()
-                                    .getAbsolutePath() + "/WearAudio.mp4");
-                    fw.write(uri.toString());
-                    fw.close();
-                }catch (IOException e)
-                {
-                    Log.e("FILE_WRITER", "IO Exception - " + e);
-                }
-            }
-        })
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.d("MESSAGE_LISTENER", "Message listener complete");
-            }
-        });
-
-        /* Done with wear messaging */
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
