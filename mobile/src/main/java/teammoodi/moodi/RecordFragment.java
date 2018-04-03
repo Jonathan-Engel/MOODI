@@ -1,50 +1,39 @@
 package teammoodi.moodi;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.media.MediaPlayer;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,20 +44,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static java.nio.file.StandardOpenOption.CREATE;
-
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,13 +76,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     public static final int REQUESTPERMISSION = 1;
     String AudioSavePathInDevice = null;
     MediaRecorder mediaRecorder;
-    MediaPlayer mediaPlayer;
-
-    private SQLiteDatabase db;
 
     private OnRecordFragmentInteractionListener mListener;
     private LottieAnimationView signal;
 
+    String sendDateTime;
+    String sendLocation;
     String androidWearPath;
 
     public RecordFragment() {
@@ -120,6 +105,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,12 +139,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 }
             }
         })
-        .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("MESSAGE_LISTENER", "Message listener successfully registered");
-            }
-        });
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("MESSAGE_LISTENER", "Message listener successfully registered");
+                    }
+                });
 
 
 
@@ -226,7 +212,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -239,12 +224,20 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean bIsProcessing = false;
+
     public void ProcessAudio(View v) {
-        LottieAnimationView view = (LottieAnimationView)v;
-        if (bIsProcessing)
-        {
+        LottieAnimationView view = (LottieAnimationView) v;
+        if (bIsProcessing) {
             view.cancelAnimation();
             mediaRecorder.stop();
+
+            LocationManager lm = (LocationManager) v.getContext().getSystemService(Context.LOCATION_SERVICE);
+            @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location == null)
+                sendLocation = "";
+            else
+                sendLocation = location.getLongitude() + " " + location.getLatitude();
+
             bIsProcessing = false;
             Toast.makeText(getActivity(), "Processing", Toast.LENGTH_SHORT).show();
             signal.playAnimation();
@@ -279,7 +272,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO}, REQUESTPERMISSION);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUESTPERMISSION);
     }
 
     @Override
@@ -289,8 +282,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 if (grantResults.length> 0) {
                     boolean StoragePermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean RecordPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean Gps1 = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    boolean Gps2 = grantResults[3] == PackageManager.PERMISSION_GRANTED;
 
-                    if (StoragePermission && RecordPermission) {
+                    if (StoragePermission && RecordPermission && Gps1 && Gps2) {
                         Toast.makeText(getActivity(), "Permission Granted",
                                 Toast.LENGTH_LONG).show();
                     } else {
@@ -305,6 +300,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         return (ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED)
                 && (ContextCompat.checkSelfPermission(getActivity(), RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED)
+                && (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED)
+                && (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED);
     }
 
@@ -333,7 +332,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         void onFragmentInteraction(Uri uri);
     }
 
-
     private class AsyncProcessAudio extends AsyncTask<String, ContentValues, ContentValues>
     {
         HttpURLConnection conn;
@@ -343,6 +341,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         protected void onPreExecute() {
             super.onPreExecute();
 
+            sendDateTime = Calendar.getInstance().getTime().toString();
         }
         @Override
         protected ContentValues doInBackground(String... params) {
@@ -353,7 +352,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
             ContentValues values = new ContentValues();
 
-            //Parse result to JSON
             try {
                 JSONObject mainMoodiObj = new JSONObject(result);
                 if(mainMoodiObj != null){
@@ -374,7 +372,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
                         JSONObject emotionObj = moodiObj.getJSONObject("emotion");
                         if (emotionObj != null){
-                            JSONObject document_tone1 = emotionObj.getJSONObject("document_tone"); //Cancer cause Dustin is silly
+                            JSONObject document_tone1 = emotionObj.getJSONObject("document_tone");
                             JSONObject document_tone2 = document_tone1.getJSONObject("document_tone");
                             if(document_tone2 != null){
                                 JSONArray tonesArr = document_tone2.getJSONArray("tones");

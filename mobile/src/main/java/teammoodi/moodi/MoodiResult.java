@@ -1,8 +1,5 @@
 package teammoodi.moodi;
 
-import android.support.annotation.NonNull;
-import android.support.v7.util.SortedList;
-
 /**
  * Created by ahb5190 on 3/24/18.
  */
