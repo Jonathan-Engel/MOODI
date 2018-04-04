@@ -28,9 +28,9 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE responseHistory (" +
                     "id PRIMARY KEY," +
-                    "timestamp STRING, " +
-                    "transcript STRING, " +
-                    "location STRING, " +
+                    "timestamp STRING DEFAULT '', " +
+                    "transcript STRING DEFAULT '', " +
+                    "location STRING DEFAULT '', " +
                     "confidence REAL DEFAULT 0, " +
                     "anger REAL DEFAULT 0, " +
                     "fear REAL DEFAULT 0," +

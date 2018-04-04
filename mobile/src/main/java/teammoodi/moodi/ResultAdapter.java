@@ -2,23 +2,14 @@ package teammoodi.moodi;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by ahb5190 on 3/24/18.
@@ -151,12 +142,16 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
         holder.transcriptTextView.setText("Transcript: " + dataList.get(position).getTranscript());
         holder.confidenceTextView.setText("Total confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%\n");
+        holder.datetimeTextView.setText(dataList.get(position).getTimestamp());
+        //TODO: datetime probably needs formatting
+        //TODO: also need to do location data
+        //TODO: IMPLEMENT PROGRESS BAR WHAAAAAAAAAAA
     }
 
     class ResultViewHolder extends RecyclerView.ViewHolder {
 
         TextView firstTextView, secondTextView, thirdTextView, forthTextView, fifthTextView,
-                sixthTextView, seventhTextView, transcriptTextView, confidenceTextView, primaryTextView;
+                sixthTextView, seventhTextView, transcriptTextView, confidenceTextView, primaryTextView, datetimeTextView;
 
         View cardviewcontents;
         View cardviewheader;
@@ -176,6 +171,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
             cardviewcontents = view.findViewById(R.id.cardview_contents);
             cardviewheader = view.findViewById(R.id.cardview_header);
+            datetimeTextView = view.findViewById(R.id.datetimeTextView);
         }
     }
 }

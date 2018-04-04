@@ -46,15 +46,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -347,6 +346,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         protected ContentValues doInBackground(String... params) {
             Map<String, String> p = new HashMap<String, String>(2);
             Map<String, Double> tonesMap = new HashMap<String, Double>();
+
+            p.put("DateTime", sendDateTime);
+            p.put("Location", sendLocation);
 
             String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
 

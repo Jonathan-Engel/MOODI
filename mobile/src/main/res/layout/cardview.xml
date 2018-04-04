@@ -29,7 +29,18 @@
                 android:layout_height="wrap_content"
                 android:textColor="#fafafa"
                 android:paddingLeft="5dp"
+                android:layout_weight="2"
                 style="@style/Base.TextAppearance.AppCompat.Inverse"/>
+
+            <TextView
+                android:id="@+id/datetimeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fafafa"
+                android:paddingRight="5dp"
+                android:layout_weight="2"
+                style="@style/Base.TextAppearance.AppCompat.Inverse"/>
+
         </LinearLayout>
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
