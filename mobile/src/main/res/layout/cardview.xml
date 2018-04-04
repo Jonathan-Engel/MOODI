@@ -11,6 +11,7 @@
     card_view:cardUseCompatPadding="true">
 
     <LinearLayout
+        android:id="@+id/headerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -36,9 +37,10 @@
                 android:id="@+id/datetimeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#fafafa"
-                android:paddingRight="5dp"
+                android:textColor="#000000"
                 android:layout_weight="2"
+                android:gravity="right"
+                android:paddingEnd="5dp"
                 style="@style/Base.TextAppearance.AppCompat.Inverse"/>
 
         </LinearLayout>

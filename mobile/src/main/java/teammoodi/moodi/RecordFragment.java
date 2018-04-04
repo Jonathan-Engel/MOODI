@@ -79,7 +79,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private OnRecordFragmentInteractionListener mListener;
     private LottieAnimationView signal;
 
-    String sendDateTime;
     String sendLocation;
     String androidWearPath;
 
@@ -339,15 +338,13 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            sendDateTime = Calendar.getInstance().getTime().toString();
         }
         @Override
         protected ContentValues doInBackground(String... params) {
             Map<String, String> p = new HashMap<String, String>(2);
             Map<String, Double> tonesMap = new HashMap<String, Double>();
 
-            p.put("DateTime", sendDateTime);
+            //Format: longitude latitude
             p.put("Location", sendLocation);
 
             String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");

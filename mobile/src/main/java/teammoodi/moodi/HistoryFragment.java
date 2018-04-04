@@ -85,7 +85,7 @@ public class HistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
-        moodiResultArrayList = EmotionalResponseDB.getInstance(getActivity()).GetResults(10);
+        moodiResultArrayList = EmotionalResponseDB.getInstance(getActivity()).GetResults(15);
 
         recyclerView = v.findViewById(R.id.results_recycler_view);
         adapter = new ResultAdapter(moodiResultArrayList);
