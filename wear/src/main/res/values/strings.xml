@@ -8,13 +8,14 @@
     <string name="start_recording">Begin recording</string>
     <string name="stop_recording">Stop recording</string>
     <string name="title_activity_receive_signal">ReceiveSignal</string>
-
-    <!-- Strings for the received tones -->
-    <string name="tone_anger">Angry</string>
-    <string name="tone_fear">Fearful</string>
-    <string name="tone_joy">Joyous</string>
-    <string name="tone_sadness">Sad</string>
-    <string name="tone_analytical">Analytical</string>
-    <string name="tone_confident">Confident</string>
-    <string name="tone_tentative">Tentative</string>
+    <string name="processing_data">Processing...</string>
+    <string name="emotion_anger">Anger</string>
+    <string name="emotion_sadness">Sadness</string>
+    <string name="emotion_fear">Fear</string>
+    <string name="emotion_joy">Joy</string>
+    <string name="emotion_analytical">Analytical</string>
+    <string name="emotion_confident">Confident</string>
+    <string name="emotion_tentative">Tentative</string>
+    <string name="emotion_none">None</string>
+    <string name="emotion_error">Error</string>
 </resources>

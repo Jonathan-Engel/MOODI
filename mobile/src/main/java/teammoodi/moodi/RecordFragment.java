@@ -1,8 +1,10 @@
 package teammoodi.moodi;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
@@ -11,6 +13,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,10 +29,17 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.animation.content.Content;
-import com.github.jrejaud.wear_socket.WearSocket;
-import com.google.android.gms.wearable.Asset;
-import com.google.gson.reflect.TypeToken;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.MessageClient;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -40,18 +51,29 @@ import java.io.Console;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static java.nio.file.StandardOpenOption.CREATE;
 
 
 /**
@@ -81,8 +103,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private OnRecordFragmentInteractionListener mListener;
     private LottieAnimationView signal;
 
-    WearSocket wearSocket;
-    String androidWearCapability;
+    Activity curActivity;
+
+    Node wearNode;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -105,7 +128,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,33 +135,74 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        curActivity = getActivity();
 
-        /*
-         * Using WearSocket to get the data changed from the watch
-         */
-        wearSocket = WearSocket.getInstance();
-        androidWearCapability = "voice_transcription";
-        wearSocket.setupAndConnect(getContext(), androidWearCapability, new WearSocket.onErrorListener() {
+        Wearable.getMessageClient(curActivity).addListener(new MessageClient.OnMessageReceivedListener() {
             @Override
-            public void onError(Throwable throwable) {
-                Log.d("wearSocket", "wearSocket.setupAndConnect error: " + throwable);
+            public void onMessageReceived(@NonNull MessageEvent messageEvent) {
+                Log.d("MESSAGE_EVENT", "Message from wear received");
+                Log.d("MESSAGE_EVENT", "Path: " + messageEvent.getPath());
+                Log.d("MESSAGE_EVENT", "Data: " + messageEvent.getData());
+
+                // Message contains the byte[] from the audio file
+                try {
+                    OutputStream out = new FileOutputStream(Environment
+                            .getExternalStorageDirectory()
+                            .getAbsolutePath() + "/moodiWearRecording.m4a");
+                    out.write(messageEvent.getData());
+                    Log.d("FILE_OUTPUT_STREAM", out.toString());
+                    out.close();
+
+                    new AsyncProcessAudio().execute(Environment
+                            .getExternalStorageDirectory()
+                            .getAbsolutePath() + "/moodiWearRecording.m4a");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("MOBILE", Environment
+                        .getExternalStorageDirectory()
+                        .getAbsolutePath() + "/" + "MOODIAudioRecording.m4a");
+            }
+        })
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("MESSAGE_LISTENER", "Message listener successfully registered");
             }
         });
 
-        wearSocket.startDataListener(getContext(), "/teammoodi/moodi/wear");
-        wearSocket.setKeyDataType("wearRecording", new TypeToken<Asset>(){}.getType());
 
-        WearSocket.DataListener dataListener = new WearSocket.DataListener() {
-            @Override
-            public void dataChanged(String s, Object o) {
-                Asset dataItem = (Asset)o;
-                new AsyncProcessAudio().execute("/teammoodi/moodi/wear");
-            }// dataItem.getDigest() or dataItem.getUri().getPath()?
-        };
+
         /*
-         * End of WearSocket use
-         */
-
+        Wearable.getDataClient(getContext())
+            .addListener(new DataClient.OnDataChangedListener() {
+            @Override
+            public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
+                Log.d("DATA_CHANGED_LISTENER", "onDataChanged has been hit");
+            }
+        })
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.d("DATA_CLIENT", "Data client complete");
+            }
+        })
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("DATA_CLIENT", "Data client successful");
+            }
+        })
+            .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("DATA_CLIENT", "Data client failed.");
+            }
+        });
+        */
     }
 
     @Override
@@ -359,8 +422,78 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             EmotionalResponseDB db = EmotionalResponseDB.getInstance(getActivity());
             db.AddResult(result);
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
+            if (fragmentManager == null)
+                return;
+            else
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
+
+            // Sending the message back to the watch with the result
+            Thread thread = new Thread()
+            {
+                public void run()
+                {
+                    try {
+                        List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
+                                .getConnectedNodes());
+
+                        for (Node node : nodes) {
+                            if (node.isNearby())
+                                wearNode = node; // connectedNode is the phone
+                        }
+
+                        String resultForWear = EmotionalResponseDB.getInstance(getActivity())
+                                .GetResults(1)
+                                .get(0)
+                                .getPrimaryEmotion();
+
+                        byte resultByte;
+                        switch(resultForWear){
+                            case "Anger":
+                                resultByte = 0;
+                                break;
+                            case "Sadness":
+                                resultByte = 1;
+                                break;
+                            case "Fear":
+                                resultByte = 2;
+                                break;
+                            case "Joy":
+                                resultByte = 3;
+                                break;
+                            case "Analytical":
+                                resultByte = 4;
+                                break;
+                            case "Confident":
+                                resultByte = 5;
+                                break;
+                            case "Tentative":
+                                resultByte = 6;
+                                break;
+                            default:
+                                resultByte = 10;
+                                break;
+                        }
+
+                        Wearable.getMessageClient(curActivity)
+                                .sendMessage(wearNode.getId(), "/moodiResult", new byte[]{resultByte})
+                                .addOnSuccessListener(new OnSuccessListener<Integer>() {
+                                    @Override
+                                    public void onSuccess(Integer integer) {
+                                        Log.d("MESSAGE_TO_WEAR", "Message successfully sent");
+                                    }
+                                });
+
+                    }
+                    catch (ExecutionException execException){Log.e(
+                            "EXECUTION_EXCEPTION", execException.toString());}
+                    catch (InterruptedException interException){Log.e
+                            ("INTERRUPTED_EXCEPTION", interException.toString());}
+                }
+            };
+            thread.start();
         }
+
+
     }
 
 

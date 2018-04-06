@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
+    android:background="@color/primaryDarkColor"
     android:padding="@dimen/box_inset_layout_padding"
     android:layout_gravity="center"
     tools:context="teammoodi.moodi.Dashboard"
@@ -30,11 +30,13 @@
 
         <TextView
             android:id="@+id/recordingText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="135dp"
+            android:layout_height="30dp"
             android:text="@string/start_recording"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"/>
+            android:textColor="@color/secondaryColor"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:textSize="19sp"/>
     </FrameLayout>
 </android.support.wear.widget.BoxInsetLayout>
 
