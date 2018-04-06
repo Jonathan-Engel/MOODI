@@ -20,12 +20,13 @@
 
         <ImageButton
             android:id="@+id/recordButton"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@color/dark_red"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:fadingEdge="horizontal"
+            android:background="@drawable/roundedbutton"
             android:onClick="recordButton_OnClick"/>
 
         <TextView
