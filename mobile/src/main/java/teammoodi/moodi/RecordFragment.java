@@ -45,7 +45,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -80,7 +79,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private LottieAnimationView signal;
 
     String sendLocation;
-    String androidWearPath;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -143,36 +141,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                         Log.d("MESSAGE_LISTENER", "Message listener successfully registered");
                     }
                 });
-
-
-
-        /*
-        Wearable.getDataClient(getContext())
-            .addListener(new DataClient.OnDataChangedListener() {
-            @Override
-            public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
-                Log.d("DATA_CHANGED_LISTENER", "onDataChanged has been hit");
-            }
-        })
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Log.d("DATA_CLIENT", "Data client complete");
-            }
-        })
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("DATA_CLIENT", "Data client successful");
-            }
-        })
-            .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("DATA_CLIENT", "Data client failed.");
-            }
-        });
-        */
     }
 
     @Override

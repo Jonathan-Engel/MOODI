@@ -143,8 +143,6 @@ public class LoginActivity extends AppCompatActivity {
             } finally {
                 conn.disconnect();
             }
-
-
         }
 
         @Override
@@ -174,7 +172,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
 
     private class AsyncCheckLogin extends AsyncTask<String, String, String>
     {
@@ -248,8 +245,6 @@ public class LoginActivity extends AppCompatActivity {
             } finally {
                 conn.disconnect();
             }
-
-
         }
 
         @Override
@@ -278,7 +273,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         }
-
     }
 }
 

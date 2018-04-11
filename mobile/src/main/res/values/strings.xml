@@ -27,7 +27,6 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="gotorecord">Record</string>
-    <string name="stopbutton">Stop</string>
     <string name="home">Home</string>
     <string name="LogInActivity">Log In</string>
     <string name="SignUpActivity">Sign Up</string>
@@ -35,8 +34,6 @@
     <string name="playback">Playback</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello from record fragment</string>
     <string name="team_sd_logo">Team SD Logo</string>
     <string name="welcome_to_moodi">Welcome to Moodi!</string>
     <string name="dashboard">Dashboard</string>
@@ -44,5 +41,6 @@
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
     <string name="history">History</string>
+    <string name="headertitle">Moodi</string>
 </resources>
 
