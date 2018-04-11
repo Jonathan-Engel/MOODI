@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -61,8 +62,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
         });
 
         holder.primaryTextView.setText(
-                dataList.get(position).getPrimaryEmotion() + ": " + String.format
-                        ("%.2f", Double.parseDouble(dataList.get(position).getPrimaryEmotionScore()) * 100) + "%");
+                dataList.get(position).getPrimaryEmotion() + ": " +
+                        (Math.round(Double.parseDouble(dataList.get(position).getPrimaryEmotionScore()) * 100)) + "%");
 
         String primaryEmotion = dataList.get(position).getPrimaryEmotion();
 
@@ -126,40 +127,51 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
             switch (i) {
                 case 0:
-                    holder.firstTextView.setText(temp[1] + ": " + String.format("%.2f", Double.parseDouble(temp[0])) + "%");
+                    holder.firstTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.firstProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 1:
-                    holder.secondTextView.setText(temp[1] + ": " + String.format("%.2f", Double.parseDouble(temp[0])) + "%");
+                    holder.secondTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.secondProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 2:
-                    holder.thirdTextView.setText(temp[1] + ": " + String.format("%.2f", Double.parseDouble(temp[0])) + "%");
+                    holder.thirdTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.thirdProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 3:
-                    holder.forthTextView.setText(temp[1] + ": " + String.format("%.2f", Double.parseDouble(temp[0])) + "%");
+                    holder.forthTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.forthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 4:
-                    holder.fifthTextView.setText(temp[1] + ": " + String.format("%.2f", Double.parseDouble(temp[0])) + "%");
+                    holder.fifthTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.fifthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 5:
-                    holder.sixthTextView.setText(temp[1] + ": " + String.format("%.2f", Double.parseDouble(temp[0])) + "%");
+                    holder.sixthTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.sixthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 6:
-                    holder.seventhTextView.setText(temp[1] + ": " + String.format("%.2f", Double.parseDouble(temp[0])) + "%\n");
+                    holder.seventhTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.seventhProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
             }
         }
 
-        holder.transcriptTextView.setText("Transcript: " + dataList.get(position).getTranscript());
+        holder.transcriptTextView.setText("\nTranscript: " + dataList.get(position).getTranscript());
         holder.confidenceTextView.setText("Total confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%\n");
         holder.datetimeTextView.setText(dataList.get(position).getTimestamp());
+        //holder.firstProgressBar.setProgressBackgroundTintList(null);
         //TODO: also need to do location data
-        //TODO: IMPLEMENT PROGRESS BAR WHAAAAAAAAAAA
+        //TODO: IMPLEMENT PROGRESS BAR WHAAAAAAAAAA change color?
     }
 
     class ResultViewHolder extends RecyclerView.ViewHolder {
 
         TextView firstTextView, secondTextView, thirdTextView, forthTextView, fifthTextView,
                 sixthTextView, seventhTextView, transcriptTextView, confidenceTextView, primaryTextView, datetimeTextView;
+
+        ProgressBar firstProgressBar, secondProgressBar, thirdProgressBar, forthProgressBar,
+                fifthProgressBar, sixthProgressBar, seventhProgressBar;
 
         View cardviewcontents;
         View cardviewheader;
@@ -180,6 +192,14 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
             cardviewcontents = view.findViewById(R.id.cardview_contents);
             cardviewheader = view.findViewById(R.id.cardview_header);
             datetimeTextView = view.findViewById(R.id.datetimeTextView);
+
+            firstProgressBar = view.findViewById(R.id.firstProgressBar);
+            secondProgressBar = view.findViewById(R.id.secondProgressBar);
+            thirdProgressBar = view.findViewById(R.id.thirdProgressBar);
+            forthProgressBar = view.findViewById(R.id.forthProgressBar);
+            fifthProgressBar = view.findViewById(R.id.fifthProgressBar);
+            sixthProgressBar = view.findViewById(R.id.sixthProgressBar);
+            seventhProgressBar = view.findViewById(R.id.seventhProgressBar);
         }
     }
 }
