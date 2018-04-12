@@ -2,6 +2,7 @@ package teammoodi.moodi;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,21 +44,18 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
         final int pos = position;
         final boolean isExpanded = position == mExpandedPosition;
 
-        //if(pos == 0)
-        //    holder.cardviewcontents.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
-        //else
+        if(pos == 0)
+            holder.cardviewcontents.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
+        else
             holder.cardviewcontents.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
         holder.itemView.setActivated(isExpanded);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //AutoTransition autoTransition = new AutoTransition();
-                //autoTransition.setDuration(3000);
-                //TransitionManager.beginDelayedTransition((ViewGroup) v.findViewById(R.id.cardcard), autoTransition);
-                //TransitionManager.beginDelayedTransition(cardview);
+                TransitionManager.beginDelayedTransition((ViewGroup) v.findViewById(R.id.cardcard));
                 mExpandedPosition = isExpanded ? -1 : pos;
-                notifyDataSetChanged();
+                notifyItemChanged(pos);
             }
         });
 
