@@ -6,9 +6,9 @@ import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.daimajia.numberprogressbar.NumberProgressBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,42 +125,39 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
             switch (i) {
                 case 0:
-                    holder.firstTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.firstTextView.setText(temp[1] + ":");
                     holder.firstProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 1:
-                    holder.secondTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.secondTextView.setText(temp[1] + ":");
                     holder.secondProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 2:
-                    holder.thirdTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.thirdTextView.setText(temp[1] + ":");
                     holder.thirdProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 3:
-                    holder.forthTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.forthTextView.setText(temp[1] + ":");
                     holder.forthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 4:
-                    holder.fifthTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.fifthTextView.setText(temp[1] + ":");
                     holder.fifthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 5:
-                    holder.sixthTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.sixthTextView.setText(temp[1] + ":");
                     holder.sixthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
                 case 6:
-                    holder.seventhTextView.setText(temp[1] + ": " + Math.round(Double.parseDouble(temp[0])) + "%");
+                    holder.seventhTextView.setText(temp[1] + ":");
                     holder.seventhProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
                     break;
             }
         }
 
-        holder.transcriptTextView.setText("\nTranscript: " + dataList.get(position).getTranscript());
-        holder.confidenceTextView.setText("Total confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%\n");
+        holder.transcriptTextView.setText(dataList.get(position).getTranscript() + "\n");
+        holder.confidenceTextView.setText("\nTotal confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%\n");
         holder.datetimeTextView.setText(dataList.get(position).getTimestamp());
-        //holder.firstProgressBar.setProgressBackgroundTintList(null);
-        //TODO: also need to do location data
-        //TODO: IMPLEMENT PROGRESS BAR WHAAAAAAAAAA change color?
     }
 
     class ResultViewHolder extends RecyclerView.ViewHolder {
@@ -168,7 +165,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
         TextView firstTextView, secondTextView, thirdTextView, forthTextView, fifthTextView,
                 sixthTextView, seventhTextView, transcriptTextView, confidenceTextView, primaryTextView, datetimeTextView;
 
-        ProgressBar firstProgressBar, secondProgressBar, thirdProgressBar, forthProgressBar,
+        //https://github.com/daimajia/NumberProgressBar
+        NumberProgressBar firstProgressBar, secondProgressBar, thirdProgressBar, forthProgressBar,
                 fifthProgressBar, sixthProgressBar, seventhProgressBar;
 
         View cardviewcontents;
