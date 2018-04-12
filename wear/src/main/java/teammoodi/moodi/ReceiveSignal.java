@@ -109,4 +109,11 @@ public class ReceiveSignal extends WearableActivity {
             }
         });
     }
+
+    public void backButton_onClick(View view)
+    {
+        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+        startActivity(intent);
+    }
+
 }

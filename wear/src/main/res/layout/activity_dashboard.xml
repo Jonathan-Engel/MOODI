@@ -5,39 +5,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryDarkColor"
+    android:background="@color/secondaryColor"
     android:padding="@dimen/box_inset_layout_padding"
-    android:layout_gravity="center"
     tools:context="teammoodi.moodi.Dashboard"
     tools:deviceIds="wear">
 
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="55dp"
+        android:text="@string/app_name"
+        android:onClick="temp_onClick"
+        android:gravity="center"/>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/inner_frame_layout_padding"
-        app:boxedEdges="all"
-        android:gravity="center">
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:background="@color/primaryDarkColor"
+        android:layout_marginTop="40dp">
 
         <ImageButton
             android:id="@+id/recordButton"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="55dp"
             android:layout_marginEnd="20dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:fadingEdge="horizontal"
             android:background="@drawable/roundedbutton"
             android:onClick="recordButton_OnClick"/>
 
         <TextView
             android:id="@+id/recordingText"
-            android:layout_width="135dp"
-            android:layout_height="30dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
             android:text="@string/start_recording"
-            android:textColor="@color/secondaryColor"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:textSize="19sp"/>
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"
+            android:gravity="center"/>
     </FrameLayout>
 </android.support.wear.widget.BoxInsetLayout>
 

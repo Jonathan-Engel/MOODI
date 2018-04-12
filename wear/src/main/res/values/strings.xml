@@ -5,8 +5,8 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
-    <string name="start_recording">Begin recording</string>
-    <string name="stop_recording">Stop recording</string>
+    <string name="start_recording">Press the green button to begin recording</string>
+    <string name="stop_recording">Press the green button again to stop recording</string>
     <string name="title_activity_receive_signal">ReceiveSignal</string>
     <string name="processing_data">Processing...</string>
     <string name="emotion_anger">Anger</string>
@@ -18,4 +18,5 @@
     <string name="emotion_tentative">Tentative</string>
     <string name="emotion_none">None</string>
     <string name="emotion_error">Error</string>
+    <string name="go_back">Return</string>
 </resources>
