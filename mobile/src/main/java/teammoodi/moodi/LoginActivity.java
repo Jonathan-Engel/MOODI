@@ -147,8 +147,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
-
             if(result.contains("My Account")) {
                 /* Here launching another activity when login successful. If you persist login state
                 use sharedPreferences of Android. and logout button to clear sharedPreferences.
@@ -166,8 +164,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
 
-                Toast.makeText(LoginActivity.this, "OOPs! Something went wrong. Connection Problem.", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(LoginActivity.this, "Oops! Something went wrong.", Toast.LENGTH_LONG).show();
             }
         }
 

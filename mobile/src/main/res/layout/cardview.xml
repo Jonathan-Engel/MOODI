@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:id="@+id/cardcard"
     android:clickable="true"
-
     card_view:cardCornerRadius="6dp"
     card_view:cardElevation="3dp"
     card_view:cardPreventCornerOverlap="false"
@@ -57,7 +56,7 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/confidenceTextView"
+                android:id="@+id/transcriptTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15dp" />
@@ -81,20 +80,15 @@
                     card_view:layout_constraintStart_toStartOf="parent"
                     card_view:layout_constraintTop_toTopOf="parent" />
 
-                <ProgressBar
+                <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/firstProgressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/NumberProgressBar_Default"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@android:color/transparent"
-                    android:max="100"
+                    android:layout_height="wrap_content"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/firstTextView"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    card_view:layout_constraintTop_toTopOf="parent"/>
 
             </android.support.constraint.ConstraintLayout>
 
@@ -111,16 +105,14 @@
                     android:paddingEnd="5dp"
                     android:textSize="15dp" />
 
-                <ProgressBar
+                <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/secondProgressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/NumberProgressBar_Default"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="2dp"
-                    android:background="@android:color/transparent"
-                    android:max="100"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/secondTextView"
@@ -141,16 +133,14 @@
                     android:paddingEnd="5dp"
                     android:textSize="15dp" />
 
-                <ProgressBar
+                <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/thirdProgressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/NumberProgressBar_Default"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="2dp"
-                    android:background="@android:color/transparent"
-                    android:max="100"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/thirdTextView"
@@ -171,16 +161,14 @@
                     android:paddingEnd="5dp"
                     android:textSize="15dp" />
 
-                <ProgressBar
+                <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/forthProgressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/NumberProgressBar_Default"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="2dp"
-                    android:background="@android:color/transparent"
-                    android:max="100"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/forthTextView"
@@ -201,16 +189,14 @@
                     android:paddingEnd="5dp"
                     android:textSize="15dp" />
 
-                <ProgressBar
+                <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/fifthProgressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/NumberProgressBar_Default"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="2dp"
-                    android:background="@android:color/transparent"
-                    android:max="100"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/fifthTextView"
@@ -231,16 +217,14 @@
                     android:paddingEnd="5dp"
                     android:textSize="15dp" />
 
-                <ProgressBar
+                <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/sixthProgressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/NumberProgressBar_Default"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="2dp"
-                    android:background="@android:color/transparent"
-                    android:max="100"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/sixthTextView"
@@ -261,16 +245,14 @@
                     android:paddingEnd="5dp"
                     android:textSize="15dp" />
 
-                <ProgressBar
+                <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/seventhProgressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
+                    style="@style/NumberProgressBar_Default"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="2dp"
-                    android:background="@android:color/transparent"
-                    android:max="100"
                     card_view:layout_constraintBottom_toBottomOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
                     card_view:layout_constraintStart_toEndOf="@+id/seventhTextView"
@@ -279,7 +261,7 @@
             </android.support.constraint.ConstraintLayout>
 
             <TextView
-                android:id="@+id/transcriptTextView"
+                android:id="@+id/confidenceTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15dp" />
