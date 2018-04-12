@@ -50,15 +50,19 @@ public class Dashboard extends AppCompatActivity
                         switch(menuItem.getItemId()) {
                             case R.id.nav_dash:
                                 ChangeFragment(new RecordFragment());
+                                getSupportActionBar().setTitle("Record");
                                 break;
                             case R.id.nav_history:
                                 ChangeFragment(new HistoryFragment());
+                                getSupportActionBar().setTitle("History");
                                 break;
                             case R.id.nav_statistics:
                                 ChangeFragment(new StatisticsFragment());
+                                getSupportActionBar().setTitle("Statistics");
                                 break;
                             case R.id.nav_settings:
                                 ChangeFragment(new SettingsFragment());
+                                getSupportActionBar().setTitle("Settings");
                                 break;
                             case R.id.nav_logout:
                                 LogoutConfirmationFragment cf = new LogoutConfirmationFragment();
@@ -89,6 +93,14 @@ public class Dashboard extends AppCompatActivity
                         }
                         return true;
                     }});
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager == null)
+            return;
+        else {
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new RecordFragment()).commit();
+            getSupportActionBar().setTitle("Record");
+        }
     }
 
     @Override

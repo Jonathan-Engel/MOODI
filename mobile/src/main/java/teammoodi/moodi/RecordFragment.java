@@ -151,6 +151,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         LottieAnimationView animationView = v.findViewById(R.id.animation_view);
         animationView.setOnClickListener(this);
         signal = v.findViewById(R.id.processing_view);
+
         return v;
     }
 
