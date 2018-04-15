@@ -1,5 +1,3 @@
 <resources>
     <string name="hello_world">Hello Round World!</string>
-    <string name="recordButton_description">Button to record user voice input</string>
-    <string name="record_text">Tap to record</string>
 </resources>

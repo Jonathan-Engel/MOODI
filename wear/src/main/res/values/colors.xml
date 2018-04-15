@@ -1,0 +1,20 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+<resources>
+    <color name="primaryColor">#ffeb3b</color>
+    <color name="primaryLightColor">#ffff72</color>
+    <color name="primaryDarkColor">#c8b900</color>
+    <color name="secondaryColor">#689f38</color>
+    <color name="secondaryLightColor">#99d066</color>
+    <color name="secondaryDarkColor">#387002</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#000000</color>
+    <!--Emotional response colors-->
+    <color name="response_anger">#a50e13</color>
+    <color name="response_sadness">#44889f</color>
+    <color name="response_fear">#ff444444</color>
+    <color name="response_joy">#efcb1d</color>
+    <color name="response_analytical">#edae9c</color>
+    <color name="response_confident">#f37028</color>
+    <color name="response_tentative">#3db68b</color>
+    <color name="response_none">#ffcccccc</color>
+</resources>

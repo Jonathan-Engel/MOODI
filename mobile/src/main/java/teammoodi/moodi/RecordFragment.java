@@ -2,6 +2,7 @@ package teammoodi.moodi;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -25,8 +26,10 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONArray;
@@ -47,7 +50,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -80,6 +85,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     String sendLocation;
 
+    Activity curActivity;
+    Node wearNode;
+
     public RecordFragment() {
         // Required empty public constructor
     }
@@ -109,21 +117,28 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Wearable.getMessageClient(getActivity()).addListener(new MessageClient.OnMessageReceivedListener() {
+
+        curActivity = getActivity();
+        Wearable.getMessageClient(curActivity).addListener(new MessageClient.OnMessageReceivedListener() {
             @Override
             public void onMessageReceived(@NonNull MessageEvent messageEvent) {
                 Log.d("MESSAGE_EVENT", "Message from wear received");
                 Log.d("MESSAGE_EVENT", "Path: " + messageEvent.getPath());
                 Log.d("MESSAGE_EVENT", "Data: " + messageEvent.getData());
 
-                // Message contains the byte[] from the audio file
                 try {
                     OutputStream out = new FileOutputStream(Environment
                             .getExternalStorageDirectory()
                             .getAbsolutePath() + "/moodiWearRecording.m4a");
                     out.write(messageEvent.getData());
-                    Log.d("FILE_OUTPUT_STREAM", out.toString());
                     out.close();
+
+                    LocationManager lm = (LocationManager) curActivity.getSystemService(Context.LOCATION_SERVICE);
+                    @SuppressLint("MissingPermission") Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location == null)
+                        sendLocation = "";
+                    else
+                        sendLocation = location.getLongitude() + " " + location.getLatitude();
 
                     new AsyncProcessAudio().execute(Environment
                             .getExternalStorageDirectory()
@@ -239,7 +254,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUESTPERMISSION);
+        ActivityCompat.requestPermissions(curActivity, new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUESTPERMISSION);
     }
 
     @Override
@@ -264,13 +279,13 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     }
 
     public boolean checkPermission() {
-        return (ContextCompat.checkSelfPermission(getActivity(), WRITE_EXTERNAL_STORAGE)
+        return (ContextCompat.checkSelfPermission(curActivity, WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(getActivity(), RECORD_AUDIO)
+                && (ContextCompat.checkSelfPermission(curActivity, RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED)
-                && (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                && (ActivityCompat.checkSelfPermission(curActivity, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED)
-                && (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                && (ActivityCompat.checkSelfPermission(curActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED);
     }
 
@@ -378,6 +393,71 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 return;
             else
                 fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
+
+            // Sending the message back to the watch with the result
+            Thread thread = new Thread()
+            {
+                public void run()
+                {
+                    try {
+                        List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
+                                .getConnectedNodes());
+
+                        for (Node node : nodes) {
+                            if (node.isNearby())
+                                wearNode = node; // connectedNode is the phone
+                        }
+
+                        String resultForWear = EmotionalResponseDB.getInstance(getActivity())
+                                .GetResults(1)
+                                .get(0)
+                                .getPrimaryEmotion();
+
+                        byte resultByte;
+                        switch(resultForWear){
+                            case "Anger":
+                                resultByte = 0;
+                                break;
+                            case "Sadness":
+                                resultByte = 1;
+                                break;
+                            case "Fear":
+                                resultByte = 2;
+                                break;
+                            case "Joy":
+                                resultByte = 3;
+                                break;
+                            case "Analytical":
+                                resultByte = 4;
+                                break;
+                            case "Confident":
+                                resultByte = 5;
+                                break;
+                            case "Tentative":
+                                resultByte = 6;
+                                break;
+                            default:
+                                resultByte = 10;
+                                break;
+                        }
+
+                        Wearable.getMessageClient(curActivity)
+                                .sendMessage(wearNode.getId(), "/moodiResult", new byte[]{resultByte})
+                                .addOnSuccessListener(new OnSuccessListener<Integer>() {
+                                    @Override
+                                    public void onSuccess(Integer integer) {
+                                        Log.d("MESSAGE_TO_WEAR", "Message successfully sent");
+                                    }
+                                });
+
+                    }
+                    catch (ExecutionException execException){Log.e(
+                            "EXECUTION_EXCEPTION", execException.toString());}
+                    catch (InterruptedException interException){Log.e
+                            ("INTERRUPTED_EXCEPTION", interException.toString());}
+                }
+            };
+            thread.start();
         }
     }
 

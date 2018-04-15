@@ -1,5 +1,6 @@
 package teammoodi.moodi;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -135,21 +138,14 @@ public class Dashboard extends WearableActivity
 
             Toast.makeText(mainActivity, "Recording completed", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(getApplicationContext(), ReceiveSignal.class);
+            Intent intent = new Intent(mainActivity, ReceiveSignal.class);
             startActivity(intent);
 
             try {
                 FileInputStream fileInputStream = new FileInputStream(AudioSavePathInDevice);
-                Log.d("FILE_INPUT", ".available(): " + fileInputStream.available());
-
                 byte[] bArr = new byte[fileInputStream.available()];
-                Log.d("FILE_INPUT", "bArr.toString(): " + bArr.toString());
-                Log.d("FILE_INPUT", "bArr.length(BEFORE): " + bArr.length);
 
                 fileInputStream.read(bArr, 0, bArr.length);
-                Log.d("FILE_INPUT", "bArr.length(AFTER): " + bArr.length);
-                Log.d("FILE_INPUT", "bArr.toString(AFTER)" + bArr.toString());
-
                 Wearable.getMessageClient(this)
                         .sendMessage(connectedNode.getId(),
                         "/teammoodi/moodi/wear", bArr);
@@ -158,58 +154,11 @@ public class Dashboard extends WearableActivity
             }catch (Exception e){
                 e.printStackTrace();
             }
-            /*
-            *  Using a put request to send the data instead of a message.
-            *    Not being used currently, here just in case it can be used
-            *    in the future.
-
-
-            PutDataMapRequest dataMap = PutDataMapRequest.create(AudioSavePathInDevice);
-            Log.d("MEDIA_RECORDER", "PutDataMapRequest created - " +
-                  dataMap.getUri().toString());
-
-            dataMap.getDataMap().putAsset("wearRecording", asset);
-            Log.d("MEDIA_RECORDER", "dataMap asset put - " +
-                  dataMap.getDataMap().toString());
-
-            PutDataRequest request = dataMap.asPutDataRequest().setUrgent();
-            Log.d("MEDIA_RECORDER----", "PutDataRequest done - " +
-                  request.toString());
-
-            Task<DataItem> putTask = Wearable
-                    .getDataClient(this)
-                    .putDataItem(request);
-
-            putTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-                @Override
-                public void onComplete(@NonNull Task<DataItem> task) {
-                    Log.d("MEDIA_RECORDER", "putTask complete");
-                    Log.d("PUT_TASK_RESULT", putTask.getResult().toString());
-                }
-            });
-
-            putTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("MEDIA_FAILURE", "putTask failed");
-                }
-            });
-
-            putTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
-                @Override
-                public void onSuccess(DataItem dataItem) {
-                    Log.d("MEDIA_SUCCESS", "putTask succeeded - " +
-                         dataItem.toString());
-                }
-            });
-            */
         }
     }
 
-
     private void requestPermission() {
-        Log.d("REQUEST_PERMISSION", "requestPermission() begun");
-        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO}, REQUESTPERMISSION);
+        ActivityCompat.requestPermissions(mainActivity, new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUESTPERMISSION);
     }
 
     @Override
@@ -219,8 +168,10 @@ public class Dashboard extends WearableActivity
                 if (grantResults.length> 0) {
                     boolean StoragePermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean RecordPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean Gps1 = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    boolean Gps2 = grantResults[3] == PackageManager.PERMISSION_GRANTED;
 
-                    if (StoragePermission && RecordPermission) {
+                    if (StoragePermission && RecordPermission && Gps1 && Gps2) {
                         Toast.makeText(mainActivity, "Permission Granted",
                                 Toast.LENGTH_LONG).show();
                     } else {
@@ -232,10 +183,13 @@ public class Dashboard extends WearableActivity
     }
 
     public boolean checkPermission() {
-        Log.d("CHECK_PERMISSION", "checkPermission() begun");
         return (ContextCompat.checkSelfPermission(mainActivity, WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED)
                 && (ContextCompat.checkSelfPermission(mainActivity, RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED)
+                && (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED)
+                && (ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED);
     }
 
@@ -248,6 +202,5 @@ public class Dashboard extends WearableActivity
         mediaRecorder.setAudioEncodingBitRate(256000);
         mediaRecorder.setAudioSamplingRate(44100);
         mediaRecorder.setOutputFile(AudioSavePathInDevice);
-        Log.d("MEDIA_RECORDER_READY", "MediaRecorderReady() complete");
     }
 }
