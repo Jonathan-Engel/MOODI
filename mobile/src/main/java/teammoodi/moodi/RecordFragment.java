@@ -73,7 +73,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     public static final int REQUESTPERMISSION = 1;
@@ -87,6 +86,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     Activity curActivity;
     Node wearNode;
+    int nodeCount;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -325,11 +325,13 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         }
         @Override
         protected ContentValues doInBackground(String... params) {
-            Map<String, String> p = new HashMap<String, String>(2);
+            Map<String, String> p = new HashMap<>(2);
             Map<String, Double> tonesMap = new HashMap<String, Double>();
 
             //Format: longitude latitude
             p.put("Location", sendLocation);
+            p.put("French", "false");
+            p.put("Profanity", "true");
 
             String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
 
@@ -351,6 +353,18 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
                             Double confidence = transcriptObj.getDouble("confidence");
                             values.put("confidence", confidence);
+                        }
+
+                        JSONObject locationObj = moodiObj.getJSONObject("geo");
+                        if (locationObj != null) {
+                            String text = locationObj.getString("geo");
+                            values.put("location", text);
+                        }
+
+                        JSONObject timestampObj = moodiObj.getJSONObject("created");
+                        if (timestampObj != null) {
+                            String text = timestampObj.getString("created");
+                            values.put("timestamp", text);
                         }
 
                         JSONObject emotionObj = moodiObj.getJSONObject("emotion");
@@ -381,8 +395,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(ContentValues result) {
-            if (result == null)
-            {
+            if (result == null) {
+                Toast.makeText(getContext(), "Audio length is too short. Please try again.", Toast.LENGTH_LONG).show();
+                signal.setFrame(0);
+                signal.pauseAnimation();
                 return;
             }
 
@@ -395,17 +411,17 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
 
             // Sending the message back to the watch with the result
-            Thread thread = new Thread()
-            {
-                public void run()
-                {
+            Thread thread = new Thread() {
+                public void run() {
                     try {
                         List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
                                 .getConnectedNodes());
 
+                        nodeCount = nodes.size();
+
                         for (Node node : nodes) {
                             if (node.isNearby())
-                                wearNode = node; // connectedNode is the phone
+                                wearNode = node;
                         }
 
                         String resultForWear = EmotionalResponseDB.getInstance(getActivity())
@@ -414,7 +430,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                                 .getPrimaryEmotion();
 
                         byte resultByte;
-                        switch(resultForWear){
+                        switch (resultForWear) {
                             case "Anger":
                                 resultByte = 0;
                                 break;
@@ -450,14 +466,17 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                                     }
                                 });
 
+                    } catch (ExecutionException execException) {
+                        Log.e(
+                                "EXECUTION_EXCEPTION", execException.toString());
+                    } catch (InterruptedException interException) {
+                        Log.e
+                                ("INTERRUPTED_EXCEPTION", interException.toString());
                     }
-                    catch (ExecutionException execException){Log.e(
-                            "EXECUTION_EXCEPTION", execException.toString());}
-                    catch (InterruptedException interException){Log.e
-                            ("INTERRUPTED_EXCEPTION", interException.toString());}
                 }
             };
-            thread.start();
+            if (nodeCount != 0)
+                thread.start();
         }
     }
 
