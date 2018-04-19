@@ -42,5 +42,9 @@
     <string name="logout">Logout</string>
     <string name="history">History</string>
     <string name="headertitle">Moodi</string>
+    <string name="prefFrench">frenchKey</string>
+    <string name="prefProfanity">profanityKey</string>
+    <string name="profanityText">Profanity</string>
+    <string name="frenchText">French</string>
 </resources>
 

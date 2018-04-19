@@ -1,0 +1,11 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:key="@string/prefFrench"
+        android:defaultValue="false" />
+
+    <SwitchPreference
+        android:key="@string/prefProfanity"
+        android:defaultValue="false" />
+
+</PreferenceScreen>

@@ -355,18 +355,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                             values.put("confidence", confidence);
                         }
 
-                        JSONObject locationObj = moodiObj.getJSONObject("geo");
-                        if (locationObj != null) {
-                            String text = locationObj.getString("geo");
-                            values.put("location", text);
-                        }
-
-                        JSONObject timestampObj = moodiObj.getJSONObject("created");
-                        if (timestampObj != null) {
-                            String text = timestampObj.getString("created");
-                            values.put("timestamp", text);
-                        }
-
                         JSONObject emotionObj = moodiObj.getJSONObject("emotion");
                         if (emotionObj != null){
                             JSONObject document_tone1 = emotionObj.getJSONObject("document_tone");
@@ -381,10 +369,15 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                                 }
                             }
                         }
+
+                        String geoText = moodiObj.getString("geo");
+                        values.put("location", geoText);
+
+                        String timeText = moodiObj.getString("created");
+                        values.put("timestamp", timeText);
                     }
 
                     return values;
-
                 }
             } catch (JSONException e){
                 Log.e("Moodi-App", "Failed to parse response/upload it to the database", e);

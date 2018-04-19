@@ -20,6 +20,10 @@ public class Dashboard extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
 
+    public static final String MYPREFS = "preferences";
+    public static final String FRENCH = "frenchKey";
+    public static final String PROFANITY = "profanityKey";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +65,8 @@ public class Dashboard extends AppCompatActivity
                                 getSupportActionBar().setTitle("Statistics");
                                 break;
                             case R.id.nav_settings:
-                                ChangeFragment(new SettingsFragment());
+                                android.app.FragmentManager f = getFragmentManager();
+                                f.beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
                                 getSupportActionBar().setTitle("Settings");
                                 break;
                             case R.id.nav_logout:
