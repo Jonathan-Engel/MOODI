@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -79,7 +81,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
             case "Anger":
                 holder.cardviewheader.setBackgroundColor(Color.parseColor("#FF5722"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
             case "Sadness":
                 holder.cardviewheader.setBackgroundColor(Color.parseColor("#2196F3"));
@@ -89,7 +91,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
             case "Fear":
                 holder.cardviewheader.setBackgroundColor(Color.parseColor("#673AB7"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
             case "Analytical":
                 holder.cardviewheader.setBackgroundColor(Color.parseColor("#00BCD4"));
@@ -99,12 +101,12 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
             case "Confident":
                 holder.cardviewheader.setBackgroundColor(Color.parseColor("#4CAF50"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
             case "Tentative":
                 holder.cardviewheader.setBackgroundColor(Color.parseColor("#795548"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
         }
 
@@ -157,6 +159,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
         holder.transcriptTextView.setText(dataList.get(position).getTranscript() + "\n");
         holder.confidenceTextView.setText("\nTotal confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%\n");
+
         holder.datetimeTextView.setText(dataList.get(position).getTimestamp());
     }
 
