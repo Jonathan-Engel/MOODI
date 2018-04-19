@@ -1,13 +1,17 @@
 package teammoodi.moodi;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,7 +21,7 @@ import android.view.ViewGroup;
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends PreferenceFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,6 +32,12 @@ public class SettingsFragment extends Fragment {
     private String mParam2;
 
     private OnSettingsFragmentInteractionListener mListener;
+    Switch frenchSwitch;
+    Switch profanitySwitch;
+    SharedPreferences sharedpref;
+    public static final String MYPREFS = "mypreferences";
+    public static final String FRENCH = "frenchKey";
+    public static final String PROFANITY = "profanityKey";
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -58,20 +68,39 @@ public class SettingsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        //https://stackoverflow.com/questions/47894525/android-navigate-to-preferencefragment-from-app-fragment
+        addPreferencesFromResource(R.xml.preferences);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
-    }
+        View v = inflater.inflate(R.layout.fragment_settings, container, false);
+        sharedpref = PreferenceManager.getDefaultSharedPreferences(this.getContext());
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onSettingsFragmentInteraction(uri);
-        }
+        //frenchSwitch = v.findViewById(R.id.frenchSwitch);
+        //profanitySwitch = v.findViewById(R.id.profanitySwitch);
+
+        frenchSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    SharedPreferences.Editor editor = sharedpref.edit();
+                    editor.putString(FRENCH, String.valueOf(b));
+                    editor.apply();
+                }
+        });
+
+        profanitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SharedPreferences.Editor editor = sharedpref.edit();
+                editor.putString(PROFANITY, String.valueOf(b));
+                editor.apply();
+            }
+        });
+
+        return v;
     }
 
     @Override

@@ -14,15 +14,15 @@ public class MoodiResult {
     private String transcript;
     private String confidence;
     private String anger;
-    private String timestamp;
     private String location;
+    private String timestamp;
+
+    private String primaryEmotion = "None";
+    private Double primaryEmotionScore = 0.0;
 
     public MoodiResult() {
 
     }
-
-    private String primaryEmotion = "None";
-    private Double primaryEmotionScore = 0.0;
 
     public String getPrimaryEmotion() {
         return primaryEmotion;

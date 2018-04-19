@@ -96,6 +96,8 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
                     moodiResult.setAnalytical(cursor.getString(cursor.getColumnIndex("analytical")));
                     moodiResult.setConfident(cursor.getString(cursor.getColumnIndex("confident")));
                     moodiResult.setTentative(cursor.getString(cursor.getColumnIndex("tentative")));
+                    moodiResult.setTimestamp(cursor.getString(cursor.getColumnIndex("timestamp")));
+                    moodiResult.setLocation((cursor.getString(cursor.getColumnIndex("location"))));
 
                     moodiResultArrayList.add(moodiResult);
                 } while(cursor.moveToPrevious());
