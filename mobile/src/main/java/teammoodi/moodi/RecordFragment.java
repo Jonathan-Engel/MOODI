@@ -89,7 +89,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
     Activity curActivity;
     Node wearNode;
-    int nodeCount;
+    int nodeCount = 0;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -213,7 +213,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     public void ProcessAudio(View v) {
         LottieAnimationView view = (LottieAnimationView) v;
         if (bIsProcessing) {
-            view.cancelAnimation();
+            view.setRepeatCount(1);
             mediaRecorder.stop();
 
             LocationManager lm = (LocationManager) v.getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -225,9 +225,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
             bIsProcessing = false;
             Toast.makeText(getActivity(), "Processing", Toast.LENGTH_SHORT).show();
-            signal.playAnimation();
 
-            PreferenceManager.setDefaultValues(this.getContext(), R.xml.preferences, false);
             frenchpref = String.valueOf(PreferenceManager.getDefaultSharedPreferences(
                     this.getContext()).getBoolean(getString(R.string.prefFrench), false));
             profanpref = String.valueOf(PreferenceManager.getDefaultSharedPreferences(
@@ -257,6 +255,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             view.playAnimation();
             Toast.makeText(getActivity(), "Recording started", Toast.LENGTH_SHORT).show();
             bIsProcessing = true;
+            signal.playAnimation();
+            view.playAnimation();
         } else {
             requestPermission();
         }
@@ -398,8 +398,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(ContentValues result) {
             if (result == null) {
                 Toast.makeText(getContext(), "Audio length is too short. Please try again.", Toast.LENGTH_LONG).show();
-                signal.setFrame(0);
-                signal.pauseAnimation();
+                signal.setRepeatMode(0);
                 return;
             }
 
@@ -411,73 +410,73 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             else
                 fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
 
-            // Sending the message back to the watch with the result
-            Thread thread = new Thread() {
-                public void run() {
-                    try {
-                        List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
-                                .getConnectedNodes());
+                // Sending the message back to the watch with the result
+                Thread thread = new Thread() {
+                    public void run() {
+                        try {
+                            List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
+                                    .getConnectedNodes());
 
-                        nodeCount = nodes.size();
+                            nodeCount = nodes.size();
 
-                        for (Node node : nodes) {
-                            if (node.isNearby())
-                                wearNode = node;
+                            for (Node node : nodes) {
+                                if (node.isNearby())
+                                    wearNode = node;
+                            }
+
+                            String resultForWear = EmotionalResponseDB.getInstance(getActivity())
+                                    .GetResults(1)
+                                    .get(0)
+                                    .getPrimaryEmotion();
+
+                            byte resultByte;
+                            switch (resultForWear) {
+                                case "Anger":
+                                    resultByte = 0;
+                                    break;
+                                case "Sadness":
+                                    resultByte = 1;
+                                    break;
+                                case "Fear":
+                                    resultByte = 2;
+                                    break;
+                                case "Joy":
+                                    resultByte = 3;
+                                    break;
+                                case "Analytical":
+                                    resultByte = 4;
+                                    break;
+                                case "Confident":
+                                    resultByte = 5;
+                                    break;
+                                case "Tentative":
+                                    resultByte = 6;
+                                    break;
+                                default:
+                                    resultByte = 10;
+                                    break;
+                            }
+
+                            Wearable.getMessageClient(curActivity)
+                                    .sendMessage(wearNode.getId(), "/moodiResult", new byte[]{resultByte})
+                                    .addOnSuccessListener(new OnSuccessListener<Integer>() {
+                                        @Override
+                                        public void onSuccess(Integer integer) {
+                                            Log.d("MESSAGE_TO_WEAR", "Message successfully sent");
+                                        }
+                                    });
+
+                        } catch (ExecutionException execException) {
+                            Log.e(
+                                    "EXECUTION_EXCEPTION", execException.toString());
+                        } catch (InterruptedException interException) {
+                            Log.e
+                                    ("INTERRUPTED_EXCEPTION", interException.toString());
                         }
-
-                        String resultForWear = EmotionalResponseDB.getInstance(getActivity())
-                                .GetResults(1)
-                                .get(0)
-                                .getPrimaryEmotion();
-
-                        byte resultByte;
-                        switch (resultForWear) {
-                            case "Anger":
-                                resultByte = 0;
-                                break;
-                            case "Sadness":
-                                resultByte = 1;
-                                break;
-                            case "Fear":
-                                resultByte = 2;
-                                break;
-                            case "Joy":
-                                resultByte = 3;
-                                break;
-                            case "Analytical":
-                                resultByte = 4;
-                                break;
-                            case "Confident":
-                                resultByte = 5;
-                                break;
-                            case "Tentative":
-                                resultByte = 6;
-                                break;
-                            default:
-                                resultByte = 10;
-                                break;
-                        }
-
-                        Wearable.getMessageClient(curActivity)
-                                .sendMessage(wearNode.getId(), "/moodiResult", new byte[]{resultByte})
-                                .addOnSuccessListener(new OnSuccessListener<Integer>() {
-                                    @Override
-                                    public void onSuccess(Integer integer) {
-                                        Log.d("MESSAGE_TO_WEAR", "Message successfully sent");
-                                    }
-                                });
-
-                    } catch (ExecutionException execException) {
-                        Log.e(
-                                "EXECUTION_EXCEPTION", execException.toString());
-                    } catch (InterruptedException interException) {
-                        Log.e
-                                ("INTERRUPTED_EXCEPTION", interException.toString());
                     }
-                }
-            };
-            if (nodeCount != 0)
-                thread.start();
+                };
+                if (nodeCount != 0)
+                    thread.start();
         }
     }
 

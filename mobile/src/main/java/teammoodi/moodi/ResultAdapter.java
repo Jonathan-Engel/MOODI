@@ -42,6 +42,27 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
         return dataList.size();
     }
 
+    private int setColors(String emotion){
+        switch (emotion) {
+            case "Joy":
+                return Color.parseColor("#FFC107");
+            case "Anger":
+                return Color.parseColor("#FF5722");
+            case "Sadness":
+                return Color.parseColor("#2196F3");
+            case "Fear":
+                return Color.parseColor("#673AB7");
+            case "Analytical":
+                return Color.parseColor("#00BCD4");
+            case "Confident":
+                return Color.parseColor("#4CAF50");
+            case "Tentative":
+                return Color.parseColor("#795548");
+        }
+
+        return Color.parseColor("#000000");
+    }
+
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
         final int pos = position;
@@ -128,38 +149,80 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
             switch (i) {
                 case 0:
-                    holder.firstTextView.setText(temp[1] + ":");
+                    holder.firstTextView.setText(temp[1]);
                     holder.firstProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
+                    holder.firstProgressBar.setReachedBarHeight(20);
+                    holder.firstProgressBar.setUnreachedBarHeight(5);
+                    holder.firstProgressBar.setProgressTextSize(60);
+                    holder.firstProgressBar.setProgressTextColor(setColors(temp[1]));
+                    holder.firstProgressBar.setReachedBarColor(setColors(temp[1]));
+                    holder.firstProgressBar.setUnreachedBarColor(setColors(temp[1]));
                     break;
                 case 1:
-                    holder.secondTextView.setText(temp[1] + ":");
+                    holder.secondTextView.setText(temp[1]);
                     holder.secondProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
+                    holder.secondProgressBar.setReachedBarHeight(20);
+                    holder.secondProgressBar.setUnreachedBarHeight(5);
+                    holder.secondProgressBar.setProgressTextSize(60);
+                    holder.secondProgressBar.setProgressTextColor(setColors(temp[1]));
+                    holder.secondProgressBar.setReachedBarColor(setColors(temp[1]));
+                    holder.secondProgressBar.setUnreachedBarColor(setColors(temp[1]));
                     break;
                 case 2:
-                    holder.thirdTextView.setText(temp[1] + ":");
+                    holder.thirdTextView.setText(temp[1]);
                     holder.thirdProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
+                    holder.thirdProgressBar.setReachedBarHeight(20);
+                    holder.thirdProgressBar.setUnreachedBarHeight(5);
+                    holder.thirdProgressBar.setProgressTextSize(60);
+                    holder.thirdProgressBar.setProgressTextColor(setColors(temp[1]));
+                    holder.thirdProgressBar.setReachedBarColor(setColors(temp[1]));
+                    holder.thirdProgressBar.setUnreachedBarColor(setColors(temp[1]));
                     break;
                 case 3:
-                    holder.forthTextView.setText(temp[1] + ":");
+                    holder.forthTextView.setText(temp[1]);
                     holder.forthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
+                    holder.forthProgressBar.setReachedBarHeight(20);
+                    holder.forthProgressBar.setUnreachedBarHeight(5);
+                    holder.forthProgressBar.setProgressTextSize(60);
+                    holder.forthProgressBar.setProgressTextColor(setColors(temp[1]));
+                    holder.forthProgressBar.setReachedBarColor(setColors(temp[1]));
+                    holder.forthProgressBar.setUnreachedBarColor(setColors(temp[1]));
                     break;
                 case 4:
-                    holder.fifthTextView.setText(temp[1] + ":");
+                    holder.fifthTextView.setText(temp[1]);
                     holder.fifthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
+                    holder.fifthProgressBar.setReachedBarHeight(20);
+                    holder.fifthProgressBar.setUnreachedBarHeight(5);
+                    holder.fifthProgressBar.setProgressTextSize(60);
+                    holder.fifthProgressBar.setProgressTextColor(setColors(temp[1]));
+                    holder.fifthProgressBar.setReachedBarColor(setColors(temp[1]));
+                    holder.fifthProgressBar.setUnreachedBarColor(setColors(temp[1]));
                     break;
                 case 5:
-                    holder.sixthTextView.setText(temp[1] + ":");
+                    holder.sixthTextView.setText(temp[1]);
                     holder.sixthProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
+                    holder.sixthProgressBar.setReachedBarHeight(20);
+                    holder.sixthProgressBar.setUnreachedBarHeight(5);
+                    holder.sixthProgressBar.setProgressTextSize(60);
+                    holder.sixthProgressBar.setProgressTextColor(setColors(temp[1]));
+                    holder.sixthProgressBar.setReachedBarColor(setColors(temp[1]));
+                    holder.sixthProgressBar.setUnreachedBarColor(setColors(temp[1]));
                     break;
                 case 6:
-                    holder.seventhTextView.setText(temp[1] + ":");
+                    holder.seventhTextView.setText(temp[1]);
                     holder.seventhProgressBar.setProgress((int) Math.round(Double.parseDouble(temp[0])));
+                    holder.seventhProgressBar.setReachedBarHeight(20);
+                    holder.seventhProgressBar.setUnreachedBarHeight(5);
+                    holder.seventhProgressBar.setProgressTextSize(60);
+                    holder.seventhProgressBar.setProgressTextColor(setColors(temp[1]));
+                    holder.seventhProgressBar.setReachedBarColor(setColors(temp[1]));
+                    holder.seventhProgressBar.setUnreachedBarColor(setColors(temp[1]));
                     break;
             }
         }
 
-        holder.transcriptTextView.setText(dataList.get(position).getTranscript() + "\n");
-        holder.confidenceTextView.setText("\nTotal confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%\n");
+        holder.transcriptTextView.setText("Transcript: " + dataList.get(position).getTranscript() + "\n");
+        holder.confidenceTextView.setText("\nTotal confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100));
 
         String datetime = dataList.get(position).getTimestamp();
 
