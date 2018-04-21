@@ -3,6 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:custom="http://schemas.android.com/tools"
     android:id="@+id/cardcard"
     android:clickable="true"
     card_view:cardCornerRadius="6dp"
@@ -36,14 +37,14 @@
 
             <TextView
                 android:id="@+id/datetimeTextView"
+                style="@style/Base.TextAppearance.AppCompat.Inverse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textSize="15dp"
                 android:layout_weight="2"
                 android:gravity="end"
                 android:paddingEnd="5dp"
-                style="@style/Base.TextAppearance.AppCompat.Inverse"/>
+                android:textColor="#000000"
+                android:textSize="15dp" />
 
         </LinearLayout>
 
@@ -59,206 +60,169 @@
                 android:id="@+id/transcriptTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:gravity="center"/>
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/firstTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/firstProgressBar"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
                     android:textSize="15dp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toStartOf="@+id/firstProgressBar"
-                    card_view:layout_constraintStart_toStartOf="parent"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/firstProgressBar"
-                    style="@style/NumberProgressBar_Default"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintStart_toEndOf="@+id/firstTextView"
-                    card_view:layout_constraintTop_toTopOf="parent"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right" />
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/secondTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/secondProgressBar"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/secondProgressBar"
-                    style="@style/NumberProgressBar_Default"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="2dp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintStart_toEndOf="@+id/secondTextView"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="right" />
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/thirdTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/thirdProgressBar"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/thirdProgressBar"
-                    style="@style/NumberProgressBar_Default"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="2dp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintStart_toEndOf="@+id/thirdTextView"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="right" />
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/forthTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/forthProgressBar"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/forthProgressBar"
-                    style="@style/NumberProgressBar_Default"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="2dp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintStart_toEndOf="@+id/forthTextView"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="right" />
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/fifthTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/fifthProgressBar"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/fifthProgressBar"
-                    style="@style/NumberProgressBar_Default"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="2dp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintStart_toEndOf="@+id/fifthTextView"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="right" />
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/sixthTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/sixthProgressBar"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/sixthProgressBar"
-                    style="@style/NumberProgressBar_Default"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="2dp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintStart_toEndOf="@+id/sixthTextView"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="right" />
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/seventhTextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/seventhProgressBar"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:paddingEnd="5dp"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
 
                 <com.daimajia.numberprogressbar.NumberProgressBar
                     android:id="@+id/seventhProgressBar"
-                    style="@style/NumberProgressBar_Default"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="2dp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent"
-                    card_view:layout_constraintStart_toEndOf="@+id/seventhTextView"
-                    card_view:layout_constraintTop_toTopOf="parent" />
+                    android:layout_gravity="right" />
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/confidenceTextView"

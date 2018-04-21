@@ -13,6 +13,6 @@
         android:key="@string/prefProfanity"
         android:title="@string/prefProfanity"
         android:summary="@string/prefProfanitySummary"
-        android:defaultValue="false" />
+        android:defaultValue="true" />
 
 </android.support.v7.preference.PreferenceScreen>
