@@ -6,8 +6,9 @@
 
     <fragment
         android:id="@+id/frag_settings"
-        android:layout_height="match_parent"
+        class="teammoodi.moodi.SettingsFragment"
+        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        class="teammoodi.moodi.SettingsFragment" />
+        android:layout_height="wrap_content" />
 
 </FrameLayout>

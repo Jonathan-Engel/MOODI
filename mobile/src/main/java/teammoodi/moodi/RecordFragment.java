@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -83,6 +84,8 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private LottieAnimationView signal;
 
     String sendLocation;
+    String frenchpref = "false";
+    String profanpref = "false";
 
     Activity curActivity;
     Node wearNode;
@@ -218,11 +221,17 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             if (location == null)
                 sendLocation = "";
             else
-                sendLocation = location.getLongitude() + " " + location.getLatitude();
+                sendLocation = location.getLatitude() + " " + location.getLongitude();
 
             bIsProcessing = false;
             Toast.makeText(getActivity(), "Processing", Toast.LENGTH_SHORT).show();
             signal.playAnimation();
+
+            PreferenceManager.setDefaultValues(this.getContext(), R.xml.preferences, false);
+            frenchpref = String.valueOf(PreferenceManager.getDefaultSharedPreferences(
+                    this.getContext()).getBoolean(getString(R.string.prefFrench), false));
+            profanpref = String.valueOf(PreferenceManager.getDefaultSharedPreferences(
+                    this.getContext()).getBoolean(getString(R.string.prefProfanity), false));
 
             new AsyncProcessAudio()
                     .execute(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.m4a");
@@ -328,10 +337,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             Map<String, String> p = new HashMap<>(2);
             Map<String, Double> tonesMap = new HashMap<String, Double>();
 
-            //Format: longitude latitude
             p.put("Location", sendLocation);
-            p.put("French", "false");
-            p.put("Profanity", "true");
+            p.put("French", frenchpref);
+            p.put("Profanity", profanpref);
 
             String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
 

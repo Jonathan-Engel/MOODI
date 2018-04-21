@@ -1,6 +1,7 @@
 package teammoodi.moodi;
 
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -20,14 +21,12 @@ public class Dashboard extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
 
-    public static final String MYPREFS = "preferences";
-    public static final String FRENCH = "frenchKey";
-    public static final String PROFANITY = "profanityKey";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -65,8 +64,7 @@ public class Dashboard extends AppCompatActivity
                                 getSupportActionBar().setTitle("Statistics");
                                 break;
                             case R.id.nav_settings:
-                                android.app.FragmentManager f = getFragmentManager();
-                                f.beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
+                                ChangeFragment(new SettingsFragment());
                                 getSupportActionBar().setTitle("Settings");
                                 break;
                             case R.id.nav_logout:
