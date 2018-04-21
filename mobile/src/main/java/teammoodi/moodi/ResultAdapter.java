@@ -3,6 +3,7 @@ package teammoodi.moodi;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -67,7 +70,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
         switch (primaryEmotion) {
             case "Joy":
-                holder.cardviewheader.setBackgroundColor(Color.parseColor("#efcb1d"));
+                holder.cardviewheader.setBackgroundColor(Color.parseColor("#FFC107"));
                 holder.primaryTextView.setTextColor(Color.BLACK);
                 holder.datetimeTextView.setTextColor(Color.BLACK);
                 break;
@@ -77,34 +80,34 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
                 holder.datetimeTextView.setTextColor(Color.BLACK);
                 break;
             case "Anger":
-                holder.cardviewheader.setBackgroundColor(Color.parseColor("#a50e13"));
+                holder.cardviewheader.setBackgroundColor(Color.parseColor("#FF5722"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
             case "Sadness":
-                holder.cardviewheader.setBackgroundColor(Color.parseColor("#44889f"));
+                holder.cardviewheader.setBackgroundColor(Color.parseColor("#2196F3"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
                 holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
             case "Fear":
-                holder.cardviewheader.setBackgroundColor(Color.DKGRAY);
+                holder.cardviewheader.setBackgroundColor(Color.parseColor("#673AB7"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
             case "Analytical":
-                holder.cardviewheader.setBackgroundColor(Color.parseColor("#edae9c"));
+                holder.cardviewheader.setBackgroundColor(Color.parseColor("#00BCD4"));
                 holder.primaryTextView.setTextColor(Color.BLACK);
                 holder.datetimeTextView.setTextColor(Color.BLACK);
                 break;
             case "Confident":
-                holder.cardviewheader.setBackgroundColor(Color.parseColor("#f37028"));
+                holder.cardviewheader.setBackgroundColor(Color.parseColor("#4CAF50"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
             case "Tentative":
-                holder.cardviewheader.setBackgroundColor(Color.parseColor("#3db68b"));
+                holder.cardviewheader.setBackgroundColor(Color.parseColor("#795548"));
                 holder.primaryTextView.setTextColor(Color.WHITE);
-                holder.datetimeTextView.setTextColor(Color.BLACK);
+                holder.datetimeTextView.setTextColor(Color.WHITE);
                 break;
         }
 
@@ -157,7 +160,18 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
 
         holder.transcriptTextView.setText(dataList.get(position).getTranscript() + "\n");
         holder.confidenceTextView.setText("\nTotal confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%\n");
-        holder.datetimeTextView.setText(dataList.get(position).getTimestamp());
+
+        String datetime = dataList.get(position).getTimestamp();
+
+        try {
+            SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            datetime = (String.valueOf(fromDateFormat.parse(datetime)).substring(0, 19));
+
+        } catch (ParseException exp) {
+            exp.printStackTrace();
+        }
+
+        holder.datetimeTextView.setText(datetime);
     }
 
     class ResultViewHolder extends RecyclerView.ViewHolder {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="@string/prefscreen">
+
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:key="@string/prefFrench"
+        android:title="@string/prefFrench"
+        android:summary="@string/prefFrenchSummary"
+        android:defaultValue="false" />
+
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:key="@string/prefProfanity"
+        android:title="@string/prefProfanity"
+        android:summary="@string/prefProfanitySummary"
+        android:defaultValue="false" />
+
+</android.support.v7.preference.PreferenceScreen>

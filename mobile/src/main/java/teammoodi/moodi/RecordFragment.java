@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -73,7 +74,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     public static final int REQUESTPERMISSION = 1;
@@ -84,9 +84,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
     private LottieAnimationView signal;
 
     String sendLocation;
+    String frenchpref = "false";
+    String profanpref = "false";
 
     Activity curActivity;
     Node wearNode;
+    int nodeCount;
 
     public RecordFragment() {
         // Required empty public constructor
@@ -218,11 +221,17 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             if (location == null)
                 sendLocation = "";
             else
-                sendLocation = location.getLongitude() + " " + location.getLatitude();
+                sendLocation = location.getLatitude() + " " + location.getLongitude();
 
             bIsProcessing = false;
             Toast.makeText(getActivity(), "Processing", Toast.LENGTH_SHORT).show();
             signal.playAnimation();
+
+            PreferenceManager.setDefaultValues(this.getContext(), R.xml.preferences, false);
+            frenchpref = String.valueOf(PreferenceManager.getDefaultSharedPreferences(
+                    this.getContext()).getBoolean(getString(R.string.prefFrench), false));
+            profanpref = String.valueOf(PreferenceManager.getDefaultSharedPreferences(
+                    this.getContext()).getBoolean(getString(R.string.prefProfanity), false));
 
             new AsyncProcessAudio()
                     .execute(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "MOODIAudioRecording.m4a");
@@ -325,11 +334,12 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
         }
         @Override
         protected ContentValues doInBackground(String... params) {
-            Map<String, String> p = new HashMap<String, String>(2);
+            Map<String, String> p = new HashMap<>(2);
             Map<String, Double> tonesMap = new HashMap<String, Double>();
 
-            //Format: longitude latitude
             p.put("Location", sendLocation);
+            p.put("French", frenchpref);
+            p.put("Profanity", profanpref);
 
             String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
 
@@ -367,10 +377,15 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                                 }
                             }
                         }
+
+                        String geoText = moodiObj.getString("geo");
+                        values.put("location", geoText);
+
+                        String timeText = moodiObj.getString("created");
+                        values.put("timestamp", timeText);
                     }
 
                     return values;
-
                 }
             } catch (JSONException e){
                 Log.e("Moodi-App", "Failed to parse response/upload it to the database", e);
@@ -381,8 +396,10 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(ContentValues result) {
-            if (result == null)
-            {
+            if (result == null) {
+                Toast.makeText(getContext(), "Audio length is too short. Please try again.", Toast.LENGTH_LONG).show();
+                signal.setFrame(0);
+                signal.pauseAnimation();
                 return;
             }
 
@@ -395,17 +412,17 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 fragmentManager.beginTransaction().replace(R.id.content_frame, new HistoryFragment()).commit();
 
             // Sending the message back to the watch with the result
-            Thread thread = new Thread()
-            {
-                public void run()
-                {
+            Thread thread = new Thread() {
+                public void run() {
                     try {
                         List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
                                 .getConnectedNodes());
 
+                        nodeCount = nodes.size();
+
                         for (Node node : nodes) {
                             if (node.isNearby())
-                                wearNode = node; // connectedNode is the phone
+                                wearNode = node;
                         }
 
                         String resultForWear = EmotionalResponseDB.getInstance(getActivity())
@@ -414,7 +431,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                                 .getPrimaryEmotion();
 
                         byte resultByte;
-                        switch(resultForWear){
+                        switch (resultForWear) {
                             case "Anger":
                                 resultByte = 0;
                                 break;
@@ -450,14 +467,17 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                                     }
                                 });
 
+                    } catch (ExecutionException execException) {
+                        Log.e(
+                                "EXECUTION_EXCEPTION", execException.toString());
+                    } catch (InterruptedException interException) {
+                        Log.e
+                                ("INTERRUPTED_EXCEPTION", interException.toString());
                     }
-                    catch (ExecutionException execException){Log.e(
-                            "EXECUTION_EXCEPTION", execException.toString());}
-                    catch (InterruptedException interException){Log.e
-                            ("INTERRUPTED_EXCEPTION", interException.toString());}
                 }
             };
-            thread.start();
+            if (nodeCount != 0)
+                thread.start();
         }
     }
 
