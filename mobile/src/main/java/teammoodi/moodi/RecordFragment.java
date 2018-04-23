@@ -120,8 +120,20 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
         curActivity = getActivity();
+
+        try {
+            List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
+                    .getConnectedNodes());
+
+            for (Node node : nodes) {
+                if (node.isNearby())
+                    wearNode = node;
+            }
+        }
+        catch (ExecutionException executionException){}
+        catch (InterruptedException interruptedException){}
+
         Wearable.getMessageClient(curActivity).addListener(new MessageClient.OnMessageReceivedListener() {
             @Override
             public void onMessageReceived(@NonNull MessageEvent messageEvent) {
@@ -399,6 +411,13 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             if (result == null) {
                 Toast.makeText(getContext(), "Audio length is too short. Please try again.", Toast.LENGTH_LONG).show();
                 signal.setRepeatMode(0);
+
+                if (wearNode != null)
+                {
+                    Wearable.getMessageClient(curActivity).sendMessage(wearNode.getId(),"/moodiResult",
+                            new byte[]{99});
+                    // Send message back to wear saying that the audio length is too short.
+                }
                 return;
             }
 
@@ -413,17 +432,6 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                 // Sending the message back to the watch with the result
                 Thread thread = new Thread() {
                     public void run() {
-                        try {
-                            List<Node> nodes = Tasks.await(Wearable.getNodeClient(curActivity)
-                                    .getConnectedNodes());
-
-                            nodeCount = nodes.size();
-
-                            for (Node node : nodes) {
-                                if (node.isNearby())
-                                    wearNode = node;
-                            }
-
                             String resultForWear = EmotionalResponseDB.getInstance(getActivity())
                                     .GetResults(1)
                                     .get(0)
@@ -465,17 +473,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
                                             Log.d("MESSAGE_TO_WEAR", "Message successfully sent");
                                         }
                                     });
-
-                        } catch (ExecutionException execException) {
-                            Log.e(
-                                    "EXECUTION_EXCEPTION", execException.toString());
-                        } catch (InterruptedException interException) {
-                            Log.e
-                                    ("INTERRUPTED_EXCEPTION", interException.toString());
-                        }
                     }
                 };
-                if (nodeCount != 0)
+                if (wearNode != null)
                     thread.start();
         }
     }

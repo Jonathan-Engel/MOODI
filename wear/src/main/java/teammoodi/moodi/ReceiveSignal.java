@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.MessageEvent;
@@ -96,6 +97,13 @@ public class ReceiveSignal extends WearableActivity {
                         emotionalText.setVisibility(View.VISIBLE);
                         emotionalColor.setVisibility(View.VISIBLE);
                         Log.d("EMOTION", "None");
+                        break;
+                    case 99:
+                        Toast.makeText(getApplicationContext(),
+                                "Audio length too short, please retry.",
+                                Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), Dashboard.class);
+                        startActivity(intent);
                         break;
                     default:
                         emotionalColor.setImageResource(R.color.black);
