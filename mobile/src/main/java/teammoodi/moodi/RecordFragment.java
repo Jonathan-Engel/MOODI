@@ -570,6 +570,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             return result;
         } catch (Exception e) {
 
+            Log.d("MULTIPARTREQUEST", "Error: " + e);
             return "error";
         }
 
