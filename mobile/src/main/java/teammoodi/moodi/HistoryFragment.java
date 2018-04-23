@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ public class HistoryFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -51,7 +49,6 @@ public class HistoryFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment HistoryFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HistoryFragment newInstance(String param1, String param2) {
         HistoryFragment fragment = new HistoryFragment();
         Bundle args = new Bundle();
@@ -97,7 +94,6 @@ public class HistoryFragment extends Fragment {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onHistoryFragmentInteraction(uri);
@@ -132,7 +128,6 @@ public class HistoryFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnHistoryFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onHistoryFragmentInteraction(Uri uri);
     }
 }

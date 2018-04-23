@@ -1,7 +1,7 @@
 package teammoodi.moodi;
 
+import android.content.ActivityNotFoundException;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -45,9 +45,6 @@ public class Dashboard extends AppCompatActivity
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
                         switch(menuItem.getItemId()) {
                             case R.id.nav_dash:
                                 ChangeFragment(new RecordFragment());
@@ -58,8 +55,11 @@ public class Dashboard extends AppCompatActivity
                                 getSupportActionBar().setTitle("History");
                                 break;
                             case R.id.nav_statistics:
-                                ChangeFragment(new StatisticsFragment());
-                                getSupportActionBar().setTitle("Statistics");
+                                try {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.moodi-app.com")));
+                                } catch (ActivityNotFoundException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             case R.id.nav_settings:
                                 ChangeFragment(new SettingsFragment());
@@ -73,9 +73,7 @@ public class Dashboard extends AppCompatActivity
                                 cf.SetListener(new LogoutConfirmationFragment.ILogoutListener() {
                                     @Override
                                     public void Logout() {
-                                        //
                                         //The actual code to run given a positive dialog
-                                        //
                                         PersistentCookieStore cookieStore = new PersistentCookieStore(getApplicationContext());
                                         cookieStore.removeAll();
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -118,7 +116,6 @@ public class Dashboard extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, f).commit();
     }
-
 
     @Override
     public void onStatisticsFragmentInteraction(Uri uri) {

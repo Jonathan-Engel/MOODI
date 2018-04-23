@@ -3,7 +3,6 @@ package teammoodi.moodi;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -221,8 +220,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
             }
         }
 
-        holder.transcriptTextView.setText("Transcript: " + dataList.get(position).getTranscript() + "\n");
-        holder.confidenceTextView.setText("\nTotal confidence: " + String.format("%.2f", Double.parseDouble(dataList.get(position).getConfidence()) * 100));
+        holder.transcriptTextView.setText(dataList.get(position).getTranscript() + "\n");
+        holder.confidenceTextView.setText(Math.round(Double.parseDouble(dataList.get(position).getConfidence()) * 100) + "%");
 
         String datetime = dataList.get(position).getTimestamp();
 

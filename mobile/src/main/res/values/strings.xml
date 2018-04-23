@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MOODI</string>
+    <string name="app_name">Moodi</string>
     <string name="welcome_to">Welcome to.....</string>
     <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>
@@ -47,5 +47,7 @@
     <string name="prefscreen">prefscreen</string>
     <string name="prefFrenchSummary">Interprets recordings in French. Default is English.</string>
     <string name="prefProfanitySummary">Censors profanity found in recordings.</string>
+    <string name="transcriptLabel">Transcript:</string>
+    <string name="confidenceLabel">Confidence:</string>
 </resources>
 
