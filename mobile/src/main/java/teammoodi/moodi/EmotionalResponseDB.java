@@ -148,7 +148,6 @@ public class EmotionalResponseDB extends SQLiteOpenHelper {
 
         @Override
         protected void onPostExecute(SQLiteDatabase db) {
-            //Make that callback
             listener.onDBReady(db);
         }
     }

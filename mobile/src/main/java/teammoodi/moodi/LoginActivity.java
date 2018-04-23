@@ -48,8 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         final String password = etPassword.getText().toString();
 
         // Initialize  AsyncLogin() class with email and password
-        new AsyncLogin().execute("test123@gmail.com", "test123");
-        //new AsyncLogin().execute(email, password);
+        //new AsyncLogin().execute("test123@gmail.com", "test123");
+        new AsyncLogin().execute(email, password);
     }
 
     private class AsyncLogin extends AsyncTask<String, String, String>
@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
                 url = new URL("http://34.217.90.146/login");
 
             } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 return "exception";
             }
@@ -107,7 +106,6 @@ public class LoginActivity extends AppCompatActivity {
                 conn.connect();
 
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
                 return "exception";
             }
@@ -188,7 +186,6 @@ public class LoginActivity extends AppCompatActivity {
                 url = new URL("http://34.217.90.146");
 
             } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 return "exception";
             }
@@ -206,7 +203,6 @@ public class LoginActivity extends AppCompatActivity {
                 conn.connect();
 
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
                 return "exception";
             }
@@ -247,13 +243,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            //this method will be running on UI thread
-
             if(result.contains("My Account")) {
-                /* Here launching another activity when login successful. If you persist login state
-                use sharedPreferences of Android. and logout button to clear sharedPreferences.
-                 */
-
                 Intent intent = new Intent(LoginActivity.this, Dashboard.class);
                 startActivity(intent);
 
@@ -261,12 +251,12 @@ public class LoginActivity extends AppCompatActivity {
             else if (result.equalsIgnoreCase("false")) {
 
                 // If username and password does not match display a error message
-                //Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_LONG).show();
 
             }
             else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
 
-                //Toast.makeText(LoginActivity.this, "OOPs! Something went wrong. Connection Problem.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Oops! Something went wrong. Connection Problem.", Toast.LENGTH_LONG).show();
 
             }
         }

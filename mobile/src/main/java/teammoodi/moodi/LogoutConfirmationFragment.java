@@ -6,14 +6,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-
-
 public class LogoutConfirmationFragment extends DialogFragment {
 
-
-    //
-    //Public interface for classes to implement
-    //
     public interface ILogoutListener {
         void Logout();
     }
@@ -47,9 +41,6 @@ public class LogoutConfirmationFragment extends DialogFragment {
        return builder.create();
    }
 
-   //
-   //Setter for the callback
-   //
    public void SetListener(ILogoutListener listener) {
         m_logoutListener = listener;
    }
