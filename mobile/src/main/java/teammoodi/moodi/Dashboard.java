@@ -56,7 +56,7 @@ public class Dashboard extends AppCompatActivity
                                 break;
                             case R.id.nav_statistics:
                                 try {
-                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.moodi-app.com")));
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.moodi-app.com/statistics")));
                                 } catch (ActivityNotFoundException e) {
                                     e.printStackTrace();
                                 }

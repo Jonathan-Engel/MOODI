@@ -341,7 +341,7 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
             p.put("French", frenchpref);
             p.put("Profanity", profanpref);
 
-            String result = multipartRequest("http://34.217.90.146/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
+            String result = multipartRequest("https://www.moodi-app.com/ProcessAudio", p, params[0], "audio_sample", "audio/mp4");
 
             ContentValues values = new ContentValues();
 

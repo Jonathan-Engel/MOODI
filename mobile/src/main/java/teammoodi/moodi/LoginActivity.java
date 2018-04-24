@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
 
                 // Enter URL address where your php file resides
-                url = new URL("http://34.217.90.146/login");
+                url = new URL("https://www.moodi-app.com/login");
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -183,7 +183,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
 
                 // Enter URL address where your php file resides
-                url = new URL("http://34.217.90.146");
+                url = new URL("http://www.moodi-app.com");
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
