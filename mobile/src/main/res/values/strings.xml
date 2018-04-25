@@ -36,14 +36,14 @@
     <string name="navigation_drawer_close">Close</string>
     <string name="team_sd_logo">Team SD Logo</string>
     <string name="welcome_to_moodi">Welcome to Moodi!</string>
-    <string name="dashboard">Dashboard</string>
+    <string name="dashboard">Record</string>
     <string name="statistics">Statistics</string>
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
     <string name="history">History</string>
     <string name="headertitle">Moodi</string>
     <string name="prefFrench">French</string>
-    <string name="prefProfanity">Profanity</string>
+    <string name="prefProfanity">Filter profanity</string>
     <string name="prefscreen">prefscreen</string>
     <string name="prefFrenchSummary">Interprets recordings in French. Default is English.</string>
     <string name="prefProfanitySummary">Censors profanity found in recordings.</string>
